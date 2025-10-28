@@ -1,0 +1,32 @@
+@use '../../../assets/themes-vars.module' as *;
+
+.avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2px solid $BACKGROUN_BTN;
+  background-color: $BACKGROUN_BTN;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  &.big {
+    width: 84px;
+    height: 84px;
+  }
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(1);
+}
+
+.initials {
+  color: $TEXT_BTN;     
+  font-weight: 600;
+  font-size: 0.5rem;
+  letter-spacing: 0.05em;
+}

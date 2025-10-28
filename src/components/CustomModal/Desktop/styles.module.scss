@@ -1,0 +1,47 @@
+@use "../../../assets/themes-vars.module" as *;
+
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.container {
+  position: relative;
+  background: $BACKGROUND_LIGHT;
+  border-radius: 8px;
+  padding: 1rem;
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow: auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  padding: 2rem;
+}
+
+.closeButton {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  border: none;
+  background: $BACKGROUND_LIGHT;
+  font-size: 1.2rem;
+  cursor: pointer;
+  border: 2px solid $BACKGROUN_BTN;
+  border-radius: 50%;
+  width: 1.7rem;
+  height: 1.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  &:hover {
+    transform: scale(1.1);
+  }
+}

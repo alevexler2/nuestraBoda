@@ -1,0 +1,43 @@
+@use "../../../assets/themes-vars.module" as *;
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5%;
+  min-width: 5.25rem;
+  width: 15rem;
+  max-width: 24rem;
+  height: 3rem;
+  padding: 0 1.25rem;
+  
+  border-radius: 2rem;
+  background-color: $BACKGROUN_BTN;
+  color: $TEXT_BTN;
+  
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.5rem;
+  letter-spacing: 0.015em;
+  
+  cursor: pointer;
+  overflow: hidden;
+  transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  border: none;
+  outline: none;
+
+  &.icon {
+    width: 8rem;
+  }
+}
+
+.container:hover {
+  background-color: $BACKGROUN_BTN_HOVER;
+}
+
+.container span {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

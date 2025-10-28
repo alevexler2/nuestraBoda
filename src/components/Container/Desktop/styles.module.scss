@@ -1,0 +1,6 @@
+@use "../../../assets/themes-vars.module" as *;
+
+.container {
+  padding: 2% 10%;
+  background-color: $BACKGROUND_LIGHT;
+}

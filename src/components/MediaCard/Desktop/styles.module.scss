@@ -1,0 +1,46 @@
+.container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: 30%;
+  aspect-ratio: 1 / 1;
+  border-radius: 1rem;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.01);
+    cursor: pointer;
+
+    .favoriteBtn {
+      opacity: 1;
+    }
+  }
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
+}
+
+.text {
+  position: relative;
+  z-index: 10;
+  padding: 1rem;
+
+  .title {
+    color: white;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.2;
+  }
+
+  .subtitle {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.875rem;
+  }
+}
