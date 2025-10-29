@@ -6,6 +6,7 @@ export interface CloudinaryFile {
   format: string;
   type: string;
   uploaded_by?: string;
+  mediaType?: 'image' | 'video';
 }
 
 export interface PhotoGalleryInterface {

@@ -1,30 +1,45 @@
 import useBreakpoints from "../../hooks/useBreakpoints";
-import type { MediaCardInterface } from "../../interface/MediaCardInterface"
+import type { MediaCardInterfaceContainer } from "../../interface/MediaCardInterfaceContainer";
 import MediaCardDesktop from "./Desktop/MediaCardDesktop"
 import MediaCardMobile from "./Mobile/MediaCardMobile";
 import MediaCardTablet from "./Tablet/MediaCardTablet";
+import { useRef } from "react";
 
-const MediaCardContainer = ({ subtitle, imageUrl }: MediaCardInterface) => {
+const MediaCardContainer = ({ subtitle, imageUrl, toggleActiveImage, activeImage, mediaType }: MediaCardInterfaceContainer) => {
   const { isMdDown, isLgDown } = useBreakpoints();
+
+  const cardRef = useRef<HTMLDivElement>(null);
+
+    const handleClick = () => {
+    toggleActiveImage(imageUrl);
+
+    if (cardRef.current) {
+      cardRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+        inline: "center" 
+      });
+    }
+  };
+
+  const commonProps = {
+    subtitle,
+    imageUrl,
+    activeImage,
+    handleClick,
+    cardRef,
+    mediaType,
+  }
 
   return (
     <>
       {
         isMdDown ? (
-          <MediaCardMobile
-            subtitle={subtitle}
-            imageUrl={imageUrl}
-          />
+          <MediaCardMobile {...commonProps} />
         ) : isLgDown ? (
-           <MediaCardTablet
-            subtitle={subtitle}
-            imageUrl={imageUrl}
-          />
+          <MediaCardTablet {...commonProps} />
         ) : (
-          <MediaCardDesktop
-            subtitle={subtitle}
-            imageUrl={imageUrl}
-          />
+          <MediaCardDesktop {...commonProps} />
         )}
     </>
   )

@@ -1,13 +1,19 @@
 import type { MediaCardInterface } from '../../../interface/MediaCardInterface'
 import styles from './styles.module.scss'
 
-const MediaCardDesktop = ({ subtitle, imageUrl }: MediaCardInterface) => {
+const MediaCardDesktop = ({ subtitle, imageUrl, activeImage, handleClick, cardRef, mediaType }: MediaCardInterface) => {
+  const isActive = activeImage === imageUrl;
+
   return (
     <div
-      className={styles.container}
+      ref={cardRef}
+      className={`${styles.container} ${isActive ? styles.active : ""}`}
+      onClick={handleClick}
       style={{ backgroundImage: `url(${imageUrl})` }}
     >
-      <div className={styles.overlay}></div>
+      {mediaType === 'video' && (
+        <video className={styles.media} src={imageUrl} controls />
+      )}
 
       <div className={styles.text}>
         <p className={styles.subtitle}>{subtitle}</p>

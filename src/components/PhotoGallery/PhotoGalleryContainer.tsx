@@ -18,12 +18,17 @@ const PhotoGalleryContainer = ({ inputValue }: PhotoGalleryInterfaceContainer) =
   const [files, setFiles] = useState<CloudinaryFile[]>([])
   const [refreshFlag, setRefreshFlag] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [activeImage, setActiveImage] = useState<string>("");
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const files = Array.from(e.target.files)
       setSelectedFiles(files)
     }
+  }
+
+  const toggleActiveImage = (imgUrl: string) => {
+    setActiveImage(prev => (prev === imgUrl ? "" : imgUrl)); // toggle
   }
 
   const renderMediaCards = () => {
@@ -47,9 +52,12 @@ const PhotoGalleryContainer = ({ inputValue }: PhotoGalleryInterfaceContainer) =
 
       return (
         <MediaCardContainer
+          activeImage={activeImage}
+          toggleActiveImage={toggleActiveImage}
           key={file.public_id}
           subtitle={`Subido por ${file.uploaded_by}`}
           imageUrl={file.url}
+          mediaType={file.mediaType}
         />
       );
     });
@@ -122,7 +130,7 @@ const PhotoGalleryContainer = ({ inputValue }: PhotoGalleryInterfaceContainer) =
 
   return (
     <Container>
-      <PhotoGalerryDesktop setError={setError} setOpenModal={setOpenModal} openModal={openModal} handleFileChange={handleFileChange} selectedFiles={selectedFiles} handleUpload={handleUpload} handleCancel={handleCancel} renderMediaCards={renderMediaCards} isUploading={isUploading}/>
+      <PhotoGalerryDesktop setError={setError} setOpenModal={setOpenModal} openModal={openModal} handleFileChange={handleFileChange} selectedFiles={selectedFiles} handleUpload={handleUpload} handleCancel={handleCancel} renderMediaCards={renderMediaCards} isUploading={isUploading} />
     </Container>
   )
 }
