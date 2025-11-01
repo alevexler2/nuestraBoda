@@ -9,7 +9,7 @@ import colors from "../../assets/_themes-vars.module.scss";
 import styles from "./Desktop/styles.module.scss";
 import { MAX_SIZE } from "../../common/constants";
 
-const PhotoGalleryContainer = () => {
+const PhotoGalleryContainer = ({ setAccessGranted }: any) => {
   const [isLoading, setIsLoading] = useState(true);
   const [openModal, setOpenModal] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
@@ -18,14 +18,20 @@ const PhotoGalleryContainer = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [activeImage, setActiveImage] = useState<string>("");
   const activeCardRef = useRef<HTMLDivElement | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const openGallery = () => {
+    fileInputRef.current?.click(); 
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const files = Array.from(e.target.files);
       setSelectedFiles(files);
+      setOpenModal(true);
     }
   };
-
+  
   const toggleActiveImage = (imgUrl: string, ref?: HTMLDivElement | null) => {
     setActiveImage((prev) => (prev === imgUrl ? "" : imgUrl));
     activeCardRef.current = ref ?? null;
@@ -160,6 +166,9 @@ const PhotoGalleryContainer = () => {
         handleCancel={handleCancel}
         renderMediaCards={renderMediaCards}
         isUploading={isUploading}
+        setAccessGranted={setAccessGranted}
+        openGallery={openGallery}
+        fileInputRef={fileInputRef}
       />
     </Container>
   );

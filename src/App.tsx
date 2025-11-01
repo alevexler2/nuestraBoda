@@ -13,7 +13,7 @@ function App() {
   return (
     <>
       {accessGranted ? (
-        <PhotoGalleryContainer />
+        <PhotoGalleryContainer setAccessGranted={setAccessGranted}/>
       ) : (
         <WeddingAccessContainer
           setAccessGranted={setAccessGranted}

@@ -22,7 +22,7 @@ const WeddingAccesDesktop = ({
         <CustomBtnContainer
           value="Ingresar"
           icon={GoogleIcon}
-          hasIicon={true}
+          hasIcon={true}
         />
       </form>
     </div>

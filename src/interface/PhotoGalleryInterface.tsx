@@ -1,4 +1,4 @@
-import type { JSX } from "react";
+import type { JSX, RefObject } from "react";
 
 export interface CloudinaryFile {
   public_id: string;
@@ -18,4 +18,7 @@ export interface PhotoGalleryInterface {
   handleCancel: () => void;
   renderMediaCards: () => JSX.Element | JSX.Element[];
   isUploading: boolean;
+  setAccessGranted: (value: boolean) => void;
+  openGallery: () => void;
+  fileInputRef: RefObject<HTMLInputElement | null>;
 }

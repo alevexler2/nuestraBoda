@@ -3,5 +3,5 @@ export interface CustomBtnInterface {
   value: string;
   handleChange: MouseEventHandler<HTMLButtonElement>;
   icon: () => JSX.Element;
-  hasIicon: boolean
+  hasIcon: boolean
 }

@@ -20,10 +20,13 @@ const PhotoGalerryDesktop = ({
   handleCancel,
   renderMediaCards,
   isUploading,
+  setAccessGranted,
+  openGallery,
+  fileInputRef,
 }: PhotoGalleryInterface) => {
   return (
     <div className={styles.container}>
-      <HeaderContainer />
+      <HeaderContainer setAccessGranted={setAccessGranted} />
       <DividerContainer />
       <h2>¡Bienvenidos a nuestro álbum de boda!</h2>
       <p>
@@ -34,8 +37,17 @@ const PhotoGalerryDesktop = ({
       <CustomBtnContainer
         value="Subir"
         icon={CameraIcon}
-        hasIicon={true}
+        hasIcon={true}
         setOpenModal={setOpenModal}
+        onClick={openGallery}
+      />
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*,video/*"
+        multiple
+        onChange={handleFileChange}
+        style={{ display: "none" }}
       />
       <div className={styles.cardsContainer}>{renderMediaCards()}</div>
       {openModal && (

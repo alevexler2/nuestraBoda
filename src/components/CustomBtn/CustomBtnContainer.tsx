@@ -4,14 +4,14 @@ import DesktopBtn from "./Desktop/DesktopBtn";
 const CustomBtnContainer = ({
   value,
   icon,
-  hasIicon,
-  setOpenModal,
+  hasIcon,
+  onClick,
 }: CustomBtnInterfaceContainer) => {
   const handleChange = () => {
-    if (setOpenModal) setOpenModal(true);
+    if (onClick) onClick();
   };
 
-  return <DesktopBtn value={value} handleChange={handleChange} icon={icon} hasIicon={hasIicon} />;
+  return <DesktopBtn value={value} handleChange={handleChange} icon={icon} hasIcon={hasIcon} />;
 };
 
 export default CustomBtnContainer;
