@@ -28,7 +28,7 @@ const PhotoGalleryContainer = ({ inputValue }: PhotoGalleryInterfaceContainer) =
   }
 
   const toggleActiveImage = (imgUrl: string) => {
-    setActiveImage(prev => (prev === imgUrl ? "" : imgUrl)); // toggle
+    setActiveImage(prev => (prev === imgUrl ? "" : imgUrl));
   }
 
   const renderMediaCards = () => {
