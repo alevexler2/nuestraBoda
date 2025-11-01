@@ -10,14 +10,8 @@ export interface CloudinaryFile {
 }
 
 export interface PhotoGalleryInterface {
-  setOpenModal: (value: boolean) => void;
-  openModal: boolean;
   handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  selectedFiles: File[];
-  handleUpload: () => void;
-  handleCancel: () => void;
   renderMediaCards: () => JSX.Element | JSX.Element[];
-  isUploading: boolean;
   setAccessGranted: (value: boolean) => void;
   openGallery: () => void;
   fileInputRef: RefObject<HTMLInputElement | null>;

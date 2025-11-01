@@ -11,31 +11,90 @@ import { MAX_SIZE } from "../../common/constants";
 
 const PhotoGalleryContainer = ({ setAccessGranted }: any) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [openModal, setOpenModal] = useState(false);
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [files, setFiles] = useState<CloudinaryFile[]>([]);
   const [refreshFlag, setRefreshFlag] = useState(false);
-  const [isUploading, setIsUploading] = useState(false);
   const [activeImage, setActiveImage] = useState<string>("");
   const activeCardRef = useRef<HTMLDivElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const openGallery = () => {
-    fileInputRef.current?.click(); 
+    fileInputRef.current?.click();
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const files = Array.from(e.target.files);
-      setSelectedFiles(files);
-      setOpenModal(true);
+      handleUpload(files);
+      e.target.value = '';
     }
   };
-  
+
   const toggleActiveImage = (imgUrl: string, ref?: HTMLDivElement | null) => {
     setActiveImage((prev) => (prev === imgUrl ? "" : imgUrl));
     activeCardRef.current = ref ?? null;
   };
+
+  const handleUpload = async (filesToUpload: File[]) => {
+    if (filesToUpload.length === 0) return;
+    setIsLoading(true)
+    const uploadedUrls: string[] = [];
+
+    try {
+      const savedName = localStorage.getItem("userName") || "sin-nombre";
+      for (const file of filesToUpload) {
+        if (file.size > MAX_SIZE) {
+          alert(
+            `El archivo ${file.name} supera los 100 MB y no se puede subir.`
+          );
+          continue;
+        }
+        const extension = file.name.split(".").pop();
+        const baseName = file.name.replace(/\.[^/.]+$/, "");
+        const newFileName = `${baseName}_*${savedName}*`;
+
+        const formData = new FormData();
+        formData.append("file", file, `${newFileName}.${extension}`);
+        formData.append(
+          "upload_preset",
+          import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
+        );
+        formData.append("folder", "mi_boda");
+
+        const res = await fetch(
+          `https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+          }/auto/upload`,
+          { method: "POST", body: formData }
+        );
+
+        const data = await res.json();
+        console.log("Archivo subido:", data.secure_url);
+        uploadedUrls.push(data.secure_url);
+      }
+
+      console.log("Archivos subidos:", uploadedUrls);
+
+      setRefreshFlag((prev) => !prev);
+    } catch (err) {
+      console.error("Error al subir archivos:", err);
+      setIsLoading(false)
+    }
+  };
+
+  useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        setIsLoading(true)
+        const data = await api.getImages();
+        setFiles(data);
+      } catch (err) {
+        console.error("Error fetching images:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchImages();
+  }, [refreshFlag]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -83,89 +142,11 @@ const PhotoGalleryContainer = ({ setAccessGranted }: any) => {
     });
   };
 
-  const handleUpload = async () => {
-    if (selectedFiles.length === 0) return;
-
-    setIsUploading(true);
-
-    const uploadedUrls: string[] = [];
-
-    try {
-      const savedName = localStorage.getItem("userName") || "sin-nombre";
-      for (const file of selectedFiles) {
-        if (file.size > MAX_SIZE) {
-          alert(
-            `El archivo ${file.name} supera los 100 MB y no se puede subir.`
-          );
-          continue;
-        }
-        const extension = file.name.split(".").pop();
-        const baseName = file.name.replace(/\.[^/.]+$/, "");
-        const newFileName = `${baseName}_*${savedName}*`;
-
-        const formData = new FormData();
-        formData.append("file", file, `${newFileName}.${extension}`);
-        formData.append(
-          "upload_preset",
-          import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
-        );
-        formData.append("folder", "mi_boda");
-
-        const res = await fetch(
-          `https://api.cloudinary.com/v1_1/${
-            import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
-          }/auto/upload`,
-          { method: "POST", body: formData }
-        );
-
-        const data = await res.json();
-        console.log("Archivo subido:", data.secure_url);
-        uploadedUrls.push(data.secure_url);
-      }
-
-      console.log("Archivos subidos:", uploadedUrls);
-
-      setSelectedFiles([]);
-      setOpenModal(false);
-      setRefreshFlag((prev) => !prev);
-    } catch (err) {
-      console.error("Error al subir archivos:", err);
-    } finally {
-      setIsUploading(false);
-    }
-  };
-
-  const handleCancel = () => {
-    setOpenModal(false);
-    setSelectedFiles([]);
-  };
-
-  useEffect(() => {
-    const fetchImages = async () => {
-      try {
-        const data = await api.getImages();
-        setFiles(data);
-      } catch (err) {
-        console.error("Error fetching images:", err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchImages();
-  }, [refreshFlag]);
-
   return (
     <Container>
       <PhotoGalerryDesktop
-        setOpenModal={setOpenModal}
-        openModal={openModal}
         handleFileChange={handleFileChange}
-        selectedFiles={selectedFiles}
-        handleUpload={handleUpload}
-        handleCancel={handleCancel}
         renderMediaCards={renderMediaCards}
-        isUploading={isUploading}
         setAccessGranted={setAccessGranted}
         openGallery={openGallery}
         fileInputRef={fileInputRef}
