@@ -1,35 +1,50 @@
-import { useEffect, useState } from "react"
-import Container from "../Container/Container"
-import PhotoGalerryDesktop from "./Desktop/PhotoGalerryDesktop"
-import type { PhotoGalleryInterfaceContainer } from "../../interface/PothoGalleryInterfaceContainer"
+import { useEffect, useRef, useState } from "react";
+import Container from "../Container/Container";
+import PhotoGalerryDesktop from "./Desktop/PhotoGalerryDesktop";
 import { api } from "../../api/apiService";
 import type { CloudinaryFile } from "../../interface/PhotoGalleryInterface";
 import MediaCardContainer from "../MediaCard/MediaCardContainer";
 import { Oval } from "react-loader-spinner";
 import colors from "../../assets/_themes-vars.module.scss";
-import styles from './Desktop/styles.module.scss'
+import styles from "./Desktop/styles.module.scss";
 import { MAX_SIZE } from "../../common/constants";
 
-const PhotoGalleryContainer = ({ inputValue }: PhotoGalleryInterfaceContainer) => {
-  const [error, setError] = useState("")
-  const [isLoading, setIsLoading] = useState(true)
-  const [openModal, setOpenModal] = useState(false)
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([])
-  const [files, setFiles] = useState<CloudinaryFile[]>([])
+const PhotoGalleryContainer = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [files, setFiles] = useState<CloudinaryFile[]>([]);
   const [refreshFlag, setRefreshFlag] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [activeImage, setActiveImage] = useState<string>("");
+  const activeCardRef = useRef<HTMLDivElement | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      const files = Array.from(e.target.files)
-      setSelectedFiles(files)
+      const files = Array.from(e.target.files);
+      setSelectedFiles(files);
     }
-  }
+  };
 
-  const toggleActiveImage = (imgUrl: string) => {
-    setActiveImage(prev => (prev === imgUrl ? "" : imgUrl));
-  }
+  const toggleActiveImage = (imgUrl: string, ref?: HTMLDivElement | null) => {
+    setActiveImage((prev) => (prev === imgUrl ? "" : imgUrl));
+    activeCardRef.current = ref ?? null;
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        activeCardRef.current &&
+        !activeCardRef.current.contains(event.target as Node)
+      ) {
+        setActiveImage(""); // cierra
+        activeCardRef.current = null;
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const renderMediaCards = () => {
     if (isLoading) {
@@ -49,7 +64,6 @@ const PhotoGalleryContainer = ({ inputValue }: PhotoGalleryInterfaceContainer) =
     }
 
     return files.map((file) => {
-
       return (
         <MediaCardContainer
           activeImage={activeImage}
@@ -64,60 +78,67 @@ const PhotoGalleryContainer = ({ inputValue }: PhotoGalleryInterfaceContainer) =
   };
 
   const handleUpload = async () => {
-    if (selectedFiles.length === 0) return
+    if (selectedFiles.length === 0) return;
 
     setIsUploading(true);
 
-    const uploadedUrls: string[] = []
+    const uploadedUrls: string[] = [];
 
     try {
+      const savedName = localStorage.getItem("userName") || "sin-nombre";
       for (const file of selectedFiles) {
         if (file.size > MAX_SIZE) {
-          alert(`El archivo ${file.name} supera los 100 MB y no se puede subir.`);
+          alert(
+            `El archivo ${file.name} supera los 100 MB y no se puede subir.`
+          );
           continue;
         }
-        const extension = file.name.split('.').pop();
+        const extension = file.name.split(".").pop();
         const baseName = file.name.replace(/\.[^/.]+$/, "");
-        const newFileName = `${baseName}_*${inputValue}*`;
+        const newFileName = `${baseName}_*${savedName}*`;
 
         const formData = new FormData();
-        formData.append('file', file, `${newFileName}.${extension}`);
-        formData.append('upload_preset', import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET);
-        formData.append('folder', 'mi_boda');
+        formData.append("file", file, `${newFileName}.${extension}`);
+        formData.append(
+          "upload_preset",
+          import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
+        );
+        formData.append("folder", "mi_boda");
 
         const res = await fetch(
-          `https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/auto/upload`,
-          { method: 'POST', body: formData }
+          `https://api.cloudinary.com/v1_1/${
+            import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+          }/auto/upload`,
+          { method: "POST", body: formData }
         );
 
         const data = await res.json();
-        console.log('Archivo subido:', data.secure_url);
-        uploadedUrls.push(data.secure_url)
+        console.log("Archivo subido:", data.secure_url);
+        uploadedUrls.push(data.secure_url);
       }
 
-      console.log('Archivos subidos:', uploadedUrls)
+      console.log("Archivos subidos:", uploadedUrls);
 
-      setSelectedFiles([])
-      setOpenModal(false)
+      setSelectedFiles([]);
+      setOpenModal(false);
       setRefreshFlag((prev) => !prev);
     } catch (err) {
-      console.error('Error al subir archivos:', err)
-      setError('Error al subir archivos. Intenta nuevamente.')
+      console.error("Error al subir archivos:", err);
     } finally {
       setIsUploading(false);
     }
-  }
+  };
 
   const handleCancel = () => {
-    setOpenModal(false)
-    setSelectedFiles([])
-  }
+    setOpenModal(false);
+    setSelectedFiles([]);
+  };
 
   useEffect(() => {
     const fetchImages = async () => {
       try {
         const data = await api.getImages();
-        setFiles(data)
+        setFiles(data);
       } catch (err) {
         console.error("Error fetching images:", err);
       } finally {
@@ -130,9 +151,18 @@ const PhotoGalleryContainer = ({ inputValue }: PhotoGalleryInterfaceContainer) =
 
   return (
     <Container>
-      <PhotoGalerryDesktop setError={setError} setOpenModal={setOpenModal} openModal={openModal} handleFileChange={handleFileChange} selectedFiles={selectedFiles} handleUpload={handleUpload} handleCancel={handleCancel} renderMediaCards={renderMediaCards} isUploading={isUploading} />
+      <PhotoGalerryDesktop
+        setOpenModal={setOpenModal}
+        openModal={openModal}
+        handleFileChange={handleFileChange}
+        selectedFiles={selectedFiles}
+        handleUpload={handleUpload}
+        handleCancel={handleCancel}
+        renderMediaCards={renderMediaCards}
+        isUploading={isUploading}
+      />
     </Container>
-  )
-}
+  );
+};
 
-export default PhotoGalleryContainer
+export default PhotoGalleryContainer;

@@ -1,22 +1,30 @@
-import { useEffect, useState } from "react"
-import WeddingAccesDesktop from "./Desktop/WeddingAccesDesktop"
-import type { WeddingAccesInterfaceContainer } from "../../interface/WeddingAccessInterfaceContainer"
+import WeddingAccesDesktop from "./Desktop/WeddingAccesDesktop";
+import type { WeddingAccesInterfaceContainer } from "../../interface/WeddingAccessInterfaceContainer";
+import { signInWithPopup } from "firebase/auth";
+import { auth, provider } from "../../config/firebaseConfig";
 
-const WeddingAccessContainer = ({ accessGranted, setAccessGranted, inputValue, setInputValue }: WeddingAccesInterfaceContainer) => {
-  const [error, setError] = useState("")
-  const [showError, setShowError] = useState(false)
+const WeddingAccessContainer = ({
+  setAccessGranted,
+}: WeddingAccesInterfaceContainer) => {
+  const loginWithGoogle = async (e: React.FormEvent<HTMLFormElement>) => {
+    try {
+      e.preventDefault();
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      console.log("Usuario logueado:", user.displayName, user.email);
+      setAccessGranted(true);
+      localStorage.setItem("accessGranted", "true");
+      localStorage.setItem("userName", user.displayName || "");
+    } catch (err) {
+      console.error("Error al iniciar sesión:", err);
+    }
+  };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-  }
-
-  useEffect(() => {
-    if(error.length > 0) setShowError(true)
-  }, [error])
-  
   return (
-    <WeddingAccesDesktop inputValue={inputValue} setInputValue={setInputValue} setAccessGranted={setAccessGranted} accessGranted={accessGranted} setError={setError} showError={showError} error={error} handleSubmit={handleSubmit}/>
-  )
-}
+    <WeddingAccesDesktop
+      loginWithGoogle={loginWithGoogle}
+    />
+  );
+};
 
-export default WeddingAccessContainer
+export default WeddingAccessContainer;

@@ -1,7 +1,7 @@
-import type { MouseEventHandler } from "react";
-
+import type { JSX, MouseEventHandler } from "react";
 export interface CustomBtnInterface {
   value: string;
   handleChange: MouseEventHandler<HTMLButtonElement>;
-  icon?: boolean;
+  icon: () => JSX.Element;
+  hasIicon: boolean
 }

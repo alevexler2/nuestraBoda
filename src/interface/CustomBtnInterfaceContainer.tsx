@@ -1,9 +1,8 @@
+import type { JSX } from "react";
+
 export interface CustomBtnInterfaceContainer {
   value: string;
-  inputValue?: string;
-  setAccessGranted?: (value: boolean) => void;
+  icon: () => JSX.Element;
+  hasIicon: boolean
   setOpenModal?: (value: boolean) => void;
-  setError: (value: string) => void;
-  accessGranted?: boolean;
-  icon?: boolean;
 }

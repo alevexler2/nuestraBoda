@@ -10,7 +10,6 @@ export interface CloudinaryFile {
 }
 
 export interface PhotoGalleryInterface {
-  setError: (value: string) => void;
   setOpenModal: (value: boolean) => void;
   openModal: boolean;
   handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;

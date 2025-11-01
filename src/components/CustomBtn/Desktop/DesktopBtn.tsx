@@ -1,16 +1,11 @@
 import type { CustomBtnInterface } from '../../../interface/CustomBtnInterface'
-import { Camera } from "lucide-react";
 import styles from './styles.module.scss'
 
-const DesktopBtn = ({ value, handleChange, icon }: CustomBtnInterface) => {
+const DesktopBtn = ({ value, handleChange, icon, hasIicon }: CustomBtnInterface) => {
   return (
-    <button type="submit" className={`${styles.container} ${icon && styles.icon}`} onClick={handleChange}>
-      {icon && (
-        <Camera
-          size={17}
-          strokeWidth={2}
-          className={styles.icon}
-        />
+    <button type="submit" className={`${styles.container} ${hasIicon && styles.icon}`} onClick={handleChange}>
+      {hasIicon && (
+        icon()
       )}
       {value}
     </button>

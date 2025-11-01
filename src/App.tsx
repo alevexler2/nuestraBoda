@@ -1,16 +1,27 @@
-import { useState } from 'react'
-import WeddingAccessContainer from './components/WeddingAccess/WeddingAccessContainer.js'
-import PhotoGalleryContainer from './components/PhotoGallery/PhotoGalleryContainer.js'
+import { useEffect, useState } from "react";
+import WeddingAccessContainer from "./components/WeddingAccess/WeddingAccessContainer.js";
+import PhotoGalleryContainer from "./components/PhotoGallery/PhotoGalleryContainer.js";
 
 function App() {
-  const [accessGranted, setAccessGranted] = useState(false)
-  const [inputValue, setInputValue] = useState("")
+  const [accessGranted, setAccessGranted] = useState(false);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("accessGranted");
+    if (saved === "true") setAccessGranted(true);
+  }, []);
 
   return (
     <>
-      {accessGranted ? <PhotoGalleryContainer inputValue={inputValue}/> : <WeddingAccessContainer setAccessGranted={setAccessGranted} accessGranted={accessGranted} setInputValue={setInputValue} inputValue={inputValue}/>}
+      {accessGranted ? (
+        <PhotoGalleryContainer />
+      ) : (
+        <WeddingAccessContainer
+          setAccessGranted={setAccessGranted}
+          accessGranted={accessGranted}
+        />
+      )}
     </>
-  )
+  );
 }
 
-export default App
+export default App;
