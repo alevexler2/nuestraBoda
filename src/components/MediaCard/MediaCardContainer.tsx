@@ -5,6 +5,7 @@ import MediaCardDesktop from "./Desktop/MediaCardDesktop";
 import MediaCardMobile from "./Mobile/MediaCardMobile";
 import MediaCardTablet from "./Tablet/MediaCardTablet";
 import { useEffect, useRef, useState, type MouseEvent } from "react";
+import { User } from "lucide-react";
 
 const MediaCardContainer = ({
   subtitle,
@@ -19,6 +20,9 @@ const MediaCardContainer = ({
   const [isLoading, setIsLoading] = useState(false);
   const [likes, setLikes] = useState<any[]>([])
   const [isLikedByUser, setIsLikedByUser] = useState(false);
+  const [viewComments, setViewComments] = useState(false);
+  const [value, setValue] = useState("");
+  const [comments, setComments] = useState([]);
 
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -26,6 +30,10 @@ const MediaCardContainer = ({
     e.stopPropagation()
     setShowAlertModal(true)
   };
+
+  const handleShowComments = () => {
+    setViewComments(!viewComments)
+  }
 
   const handleDelete = async () => {
     if (!imageUrl) return;
@@ -54,22 +62,67 @@ const MediaCardContainer = ({
     }
   };
 
+  const handleSendComment = async () => {
+    const UserEmail = localStorage.getItem("userEmail") || "Invitado";
+    await api.createMediaFileComment({
+      MediaFileID,
+      UserEmail,
+      CommentText: value
+    });
+    setValue("")
+    fetchComments()
+  }
+
   const fetchLikes = async () => {
     try {
-      const likes = await api.getLikesByMediaFile(MediaFileID);
-      setLikes(likes)
+      if (MediaFileID) {
+        const likes = await api.getLikesByMediaFile(MediaFileID);
+        setLikes(likes)
+      }
     } catch (error) {
       console.error(error);
     }
   }
 
+  const fetchComments = async () => {
+    if(MediaFileID) {
+      const comments = await api.getCommentsByMediaFile(MediaFileID);
+      setComments(comments)
+    }
+  }
+
+  const renderComments = (styles:any) => {
+    const currentUser = localStorage.getItem("userEmail") || "Invitado";
+
+    return comments.map((comment: any) => {
+      const isOwnComment = comment.UserEmail === currentUser;
+
+      return (
+        <div
+          key={comment.ID}
+          className={`${styles.commentPreview} ${isOwnComment ? styles.ownComment : ""
+            }`}
+        >
+          <div className={styles.userNameContainer}>
+            <User size={18} strokeWidth={1.8} />
+            <p className={styles.userName}>
+              {isOwnComment ? "Yo" : comment.UserEmail}:
+            </p>
+          </div>
+          <p>{comment.CommentText}</p>
+        </div>
+      );
+    });
+  };
+
   useEffect(() => {
     fetchLikes()
+    fetchComments()
   }, [])
 
   useEffect(() => {
-    const userName = localStorage.getItem("userEmail")
-    setIsLikedByUser(likes.some(like => like.UserEmail === userName));
+      const userName = localStorage.getItem("userEmail")
+      setIsLikedByUser(likes.some(like => like.UserEmail === userName));
   }, [likes]);
 
   const commonProps = {
@@ -86,6 +139,13 @@ const MediaCardContainer = ({
     handleLike,
     likesCount: likes.length,
     isLikedByUser,
+    handleShowComments,
+    viewComments,
+    setValue,
+    value,
+    handleSendComment,
+    renderComments,
+    comments,
   };
 
   return (

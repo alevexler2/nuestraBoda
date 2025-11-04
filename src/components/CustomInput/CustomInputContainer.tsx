@@ -1,11 +1,11 @@
 import InptuDesktop from './Desktop/InptuDesktop'
 import type { InputInterfaceContainer } from '../../interface/InputInterfaceContainer'
 
-const CustomInputContainer = ({ placeholder, value, setValue }: InputInterfaceContainer) => {
-  const handleChange = (e:any) =>{ setValue(e.target.value)}
+const CustomInputContainer = ({ placeholder, value, setValue, handleSendComment }: InputInterfaceContainer) => {
+  const handleChange = (e: any) => { setValue(e.target.value) }
 
   return (
-    <InptuDesktop placeholder={placeholder} value={value} handleChange={handleChange}/>
+    <InptuDesktop placeholder={placeholder} value={value} handleChange={handleChange} onClick={handleSendComment}/>
   )
 }
 

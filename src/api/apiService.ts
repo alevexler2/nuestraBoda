@@ -87,12 +87,52 @@ class ApiService {
     }
   }
 
-   public async getLikesByMediaFile(mediaFileID: string) {
+  public async getLikesByMediaFile(mediaFileID: string) {
     try {
-      const response = await this.axiosInstance.get(`api/media-file-like/media-file/${mediaFileID}`);
+      const response = await this.axiosInstance.get(
+        `api/media-file-like/media-file/${mediaFileID}`
+      );
       return response.data;
     } catch (error) {
-      console.error(`Error fetching likes for media file ${mediaFileID}:`, error);
+      console.error(
+        `Error fetching likes for media file ${mediaFileID}:`,
+        error
+      );
+      throw error;
+    }
+  }
+
+  public async createMediaFileComment(createDto: {
+    MediaFileID: string;
+    UserEmail: string;
+    CommentText: string;
+  }) {
+    try {
+      const response = await this.axiosInstance.post(
+        "api/media-file-comment",
+        createDto
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error creating media file comment:", error);
+      throw error;
+    }
+  }
+
+  public async getCommentsByMediaFile(MediaFileID: string) {
+    try {
+      const response = await this.axiosInstance.get(
+        "api/media-file-comment/media-file",
+        {
+          params: { MediaFileID },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error(
+        `Error fetching comments for media file ${MediaFileID}:`,
+        error
+      );
       throw error;
     }
   }

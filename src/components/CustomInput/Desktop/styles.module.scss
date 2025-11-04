@@ -1,8 +1,14 @@
 @use "../../../assets/themes-vars.module" as *;
 
-.container {
+.inputWrapper {
+  position: relative;
+  width: 80%;
+  display: flex;
+}
+
+.input {
   height: 2rem;
-  width: 15rem;
+  width: 100%;
   border-radius: 2rem;
   display: flex;
   align-items: center;
@@ -14,13 +20,14 @@
   border: none;
   outline: none;
   font-size: 1rem;
+  padding-right: 2.5rem;
 }
 
-.container::placeholder {
+.input::placeholder {
   color: $TEXT_GOLD;
 }
 
-.container:focus {
+.input:focus {
   background-color: $BACKGROUN_SECONDARY_FOCUS;
   transition: background-color 0.2s ease-in-out;
 }
@@ -29,5 +36,17 @@ form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  align-items: center;
+}
+
+.sendButton {
+  position: absolute;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
   align-items: center;
 }

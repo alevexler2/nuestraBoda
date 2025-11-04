@@ -4,4 +4,5 @@ export interface InputInterface {
   placeholder: string;
   value: string;
   handleChange: ChangeEventHandler<HTMLInputElement>;
+  onClick: () => void;
 }

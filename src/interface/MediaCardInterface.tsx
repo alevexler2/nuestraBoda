@@ -1,3 +1,5 @@
+import type { JSX } from "react";
+
 export interface MediaCardInterface {
   subtitle: string
   imageUrl: string
@@ -12,4 +14,11 @@ export interface MediaCardInterface {
   handleLike: () => void;
   likesCount: number,
   isLikedByUser: boolean,
+  viewComments: boolean,
+  handleShowComments: () => void;
+  value: string;
+  setValue: (value:string) => void;
+  handleSendComment: () => void;
+  renderComments: (value:any) => JSX.Element[];
+  comments: any
 }

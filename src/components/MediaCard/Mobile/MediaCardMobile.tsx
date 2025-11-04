@@ -2,11 +2,10 @@ import { Oval } from 'react-loader-spinner';
 import type { MediaCardInterface } from '../../../interface/MediaCardInterface'
 import CustomModalContainer from '../../CustomModal/CustomModalContainer';
 import styles from './styles.module.scss'
-import { Heart, MessageCircle, Trash2 } from 'lucide-react';
+import { Heart, MessageCircle, Trash2, User } from 'lucide-react';
+import CustomInputContainer from '../../CustomInput/CustomInputContainer';
 
-const MediaCardMobile = ({ subtitle, imageUrl, cardRef, mediaType, onDelete, owner, showAlertModal, setShowAlertModal, handleDelete, isLoading, handleLike, likesCount, isLikedByUser }: MediaCardInterface) => {
-  const user = "Candelaria Reyes"
-  const lastComment = "Hermoso recuerdo ❤️";
+const MediaCardMobile = ({ subtitle, imageUrl, cardRef, mediaType, onDelete, owner, showAlertModal, setShowAlertModal, handleDelete, isLoading, handleLike, likesCount, isLikedByUser, handleShowComments, viewComments, value, setValue, handleSendComment, renderComments, comments }: MediaCardInterface) => {
 
   return (
     <div
@@ -15,7 +14,7 @@ const MediaCardMobile = ({ subtitle, imageUrl, cardRef, mediaType, onDelete, own
     >
       <div className={styles.mediaWrapper}>
         <div className={styles.uploaderOverlay}>
-          <span>Subido por {subtitle}</span>
+          <span>{subtitle}</span>
         </div>
         {mediaType === 'image' && (
           <img src={imageUrl} alt={subtitle} className={styles.media} />
@@ -35,25 +34,40 @@ const MediaCardMobile = ({ subtitle, imageUrl, cardRef, mediaType, onDelete, own
         )}
       </div>
 
-      <div className={styles.cardLower}>
+      <div className={`${styles.cardLower} ${viewComments ? styles.showComments : ""}`}>
         <div className={styles.actions}>
           <Heart size={18} strokeWidth={1.8} onClick={handleLike} className={isLikedByUser ? styles.liked : ""} />
-          <MessageCircle size={18} strokeWidth={1.8} />
+          <MessageCircle size={18} strokeWidth={1.8} onClick={handleShowComments} />
         </div>
-        <div className={styles.likesCount}>
+        <div className={`${styles.likesCount}`}>
           {likesCount > 0 ? (
-            <span>{likesCount} persona{likesCount > 1 ? "s" : ""} dio{likesCount > 1 ? "n" : ""} "me gusta"</span>
+            <span>{likesCount} persona{likesCount > 1 ? "s" : ""} di{likesCount > 1 ? "eron" : "o"} "me gusta"</span>
           ) : (
             <span>¡Sé el primero en dar "me gusta"! 😄</span>
           )}
         </div>
-        <div className={styles.commentPreview}>
-          <p className={styles.userName}>{user}:</p>
-          <p>{lastComment}</p>
-        </div>
-        <div className={styles.comments}>
-          Ver todos los comentarios
-        </div>
+
+        {viewComments ? (
+          <div className={styles.commentsContainer}>
+            <div className={styles.commets}>
+              {renderComments(styles)}
+            </div>
+            <CustomInputContainer placeholder='Ingresa un comentario' value={value} setValue={setValue} handleSendComment={handleSendComment} />
+          </div>
+        ) : (
+          <>
+            <div className={styles.lastCommentPreview}>
+              <div className={styles.userNameContainer}>
+                <User size={18} strokeWidth={1.8} />
+                <p className={styles.userName}>{comments[comments.length - 1]?.UserEmail}:</p>
+              </div>
+              <p>{comments[comments.length - 1]?.CommentText}</p>
+            </div>
+            <div className={styles.viewAllComments} onClick={handleShowComments}>
+              Ver todos los comentarios
+            </div>
+          </>
+        )}
       </div>
       <CustomModalContainer isOpen={showAlertModal} setIsOpen={setShowAlertModal}>
         <div className={styles.modalContent}>
