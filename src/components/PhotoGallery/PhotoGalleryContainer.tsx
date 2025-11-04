@@ -7,15 +7,16 @@ import MediaCardContainer from "../MediaCard/MediaCardContainer";
 import { Oval } from "react-loader-spinner";
 import colors from "../../assets/_themes-vars.module.scss";
 import styles from "./Desktop/styles.module.scss";
-import { MAX_SIZE } from "../../common/constants";
+import { MAX_SIZE, MEDIA_TYPE_ID } from "../../common/constants";
+import type { PhotoGalleryContainerInterface } from "../../interface/PhotoFalleryContainerInterface";
 
-const PhotoGalleryContainer = ({ setAccessGranted }: any) => {
+const PhotoGalleryContainer = ({ setAccessGranted, event }: PhotoGalleryContainerInterface) => {
   const [isLoading, setIsLoading] = useState(true);
   const [files, setFiles] = useState<CloudinaryFile[]>([]);
   const [refreshFlag, setRefreshFlag] = useState(false);
-  const [activeImage, setActiveImage] = useState<string>("");
   const activeCardRef = useRef<HTMLDivElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const savedName = localStorage.getItem("userEmail") || "sin-nombre";
 
   const openGallery = () => {
     fileInputRef.current?.click();
@@ -29,10 +30,14 @@ const PhotoGalleryContainer = ({ setAccessGranted }: any) => {
     }
   };
 
-  const toggleActiveImage = (imgUrl: string, ref?: HTMLDivElement | null) => {
-    setActiveImage((prev) => (prev === imgUrl ? "" : imgUrl));
-    activeCardRef.current = ref ?? null;
-  };
+  function getMediaType(file: File): number {
+    const mime = file.type;
+    if (mime.startsWith("image/")) return MEDIA_TYPE_ID.IMAGE;
+    if (mime.startsWith("video/")) return MEDIA_TYPE_ID.VIDEO;
+
+    return MEDIA_TYPE_ID.IMAGE;
+  }
+
 
   const handleUpload = async (filesToUpload: File[]) => {
     if (filesToUpload.length === 0) return;
@@ -40,7 +45,9 @@ const PhotoGalleryContainer = ({ setAccessGranted }: any) => {
     const uploadedUrls: string[] = [];
 
     try {
-      const savedName = localStorage.getItem("userName") || "sin-nombre";
+      const pathSegments = window.location.pathname.split("/").filter(Boolean);
+      const eventId = pathSegments[pathSegments.length - 1];
+      const uploadedBy = localStorage.getItem("userName") || "sin-nombre";
       for (const file of filesToUpload) {
         if (file.size > MAX_SIZE) {
           alert(
@@ -50,7 +57,7 @@ const PhotoGalleryContainer = ({ setAccessGranted }: any) => {
         }
         const extension = file.name.split(".").pop();
         const baseName = file.name.replace(/\.[^/.]+$/, "");
-        const newFileName = `${baseName}_*${savedName}*`;
+        const newFileName = `${baseName}_*${uploadedBy}*`;
 
         const formData = new FormData();
         formData.append("file", file, `${newFileName}.${extension}`);
@@ -69,6 +76,15 @@ const PhotoGalleryContainer = ({ setAccessGranted }: any) => {
         const data = await res.json();
         console.log("Archivo subido:", data.secure_url);
         uploadedUrls.push(data.secure_url);
+
+        const mediaType = getMediaType(file);
+
+        await api.createMediaFile({
+          URL: data.secure_url,
+          MediaTypeID: mediaType,
+          UploadedBy: savedName,
+          EventID: eventId,
+        });
       }
 
       console.log("Archivos subidos:", uploadedUrls);
@@ -84,6 +100,7 @@ const PhotoGalleryContainer = ({ setAccessGranted }: any) => {
     const fetchImages = async () => {
       try {
         setIsLoading(true)
+        setRefreshFlag(false)
         const data = await api.getImages();
         setFiles(data);
       } catch (err) {
@@ -102,7 +119,6 @@ const PhotoGalleryContainer = ({ setAccessGranted }: any) => {
         activeCardRef.current &&
         !activeCardRef.current.contains(event.target as Node)
       ) {
-        setActiveImage(""); // cierra
         activeCardRef.current = null;
       }
     };
@@ -131,12 +147,13 @@ const PhotoGalleryContainer = ({ setAccessGranted }: any) => {
     return files.map((file) => {
       return (
         <MediaCardContainer
-          activeImage={activeImage}
-          toggleActiveImage={toggleActiveImage}
           key={file.public_id}
           subtitle={`Subido por ${file.uploaded_by}`}
           imageUrl={file.url}
           mediaType={file.mediaType}
+          owner={file.ownerEmail === savedName}
+          setRefreshFlag={setRefreshFlag}
+          MediaFileID={file.MediaFileID}
         />
       );
     });
@@ -150,6 +167,7 @@ const PhotoGalleryContainer = ({ setAccessGranted }: any) => {
         setAccessGranted={setAccessGranted}
         openGallery={openGallery}
         fileInputRef={fileInputRef}
+        event={event}
       />
     </Container>
   );

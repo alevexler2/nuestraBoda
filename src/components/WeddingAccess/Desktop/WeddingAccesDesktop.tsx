@@ -7,17 +7,17 @@ import AvatarContainer from "../../Avatar/AvatarContainer";
 import { GoogleIcon } from "../../GoogleIcon/GoogleIcon";
 
 const WeddingAccesDesktop = ({
-  loginWithGoogle,
+  loginWithGoogle, event
 }: WeddingAccesInterface) => {
   return (
     <div className={styles.container}>
       <AvatarContainer big={true} />
       <div className={styles.titleContainer}>
         <Heart fill={colors.backgroundBtn} strokeWidth={0} size={24} />
-        <h1>{import.meta.env.VITE_SITE_NAME}</h1>
+        <h1>{event.EventName}</h1>
         <Heart fill={colors.backgroundBtn} strokeWidth={0} size={24} />
       </div>
-      <h4>Ale & Cande</h4>
+      <h4>{event.Subtitle}</h4>
       <form onSubmit={loginWithGoogle}>
         <CustomBtnContainer
           value="Ingresar"

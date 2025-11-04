@@ -3,8 +3,9 @@ import HeaderDesktop from "./Desktop/HeaderDesktop";
 import HeadersMobile from "./Mobile/HeadersMobile";
 import { auth } from "../../config/firebaseConfig";
 import { signOut } from "firebase/auth";
+import type { HeaderInterfaceContainer } from "../../interface/HeaderInterfaceContainer";
 
-const HeaderContainer = ({ setAccessGranted }: any) => {
+const HeaderContainer = ({ setAccessGranted, event }: HeaderInterfaceContainer) => {
   const { isMdDown } = useBreakpoints();
 
   const logout = async () => {
@@ -22,9 +23,9 @@ const HeaderContainer = ({ setAccessGranted }: any) => {
   return (
     <>
       {isMdDown ? (
-        <HeadersMobile logout={logout} />
+        <HeadersMobile logout={logout} event={event}/>
       ) : (
-        <HeaderDesktop logout={logout} />
+        <HeaderDesktop logout={logout} event={event}/>
       )}
     </>
   );

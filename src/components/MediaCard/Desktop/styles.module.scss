@@ -1,45 +1,145 @@
+@use "../../../assets/themes-vars.module" as *;
+
 .container {
-  position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  width: 30%;
+  width: 40%;
   aspect-ratio: 3 / 4;
   border-radius: 1rem;
   overflow: hidden;
-  background-size: cover;
-  background-position: center;
-  transition: transform 0.3s ease;
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
   background-color: black;
-  cursor: pointer;
-
-  &.active {
-    transform: scale(1.3);
-    z-index: 100;
-  }
+  transition: transform 0.3s ease;
 }
 
-.text {
+.mediaWrapper {
   position: relative;
-  z-index: 10;
-  padding: 1rem;
-
-  .subtitle {
-    color: rgba(255, 255, 255, 0.8);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    font-size: 0.875rem;
-  }
+  flex: 1 1 auto; 
+  min-height: 0;
 }
 
 .media {
-  position: absolute;
-  top: 50%;
-  left: 50%;
   width: 100%;
   height: 100%;
-  transform: translate(-50%, -50%);
-  object-fit: cover;
+  object-fit: contain;
+  background-color: black;
+}
+
+
+.uploaderOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.85rem;
+  color: #f1f1f1;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+}
+
+
+.cardLower {
+  flex-shrink: 0;
+  padding: 1rem;
+  background: $TEXT_PRIMARY;
+  color: $TEXT_GOLD;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  .actions {
+    display: flex;
+    gap: 0.5rem;
+    color: $TEXT_BTN;
+    svg {
+      cursor: pointer;
+    }
+  }
+
+  .likesCount {
+    color: $TEXT_BTN;
+  }
+
+  .commentPreview {
+    display: flex;
+    gap: 0.2rem;
+
+    .userName {
+      font-weight: 700;
+      color: $TEXT_GOLD;
+    }
+
+    p {
+      color: $TEXT_BTN;
+    }
+  }
+}
+
+.closeButton {
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.5rem;
+  color: $TEXT_BTN;
+  // border: none;
+  background: $ERROR;
+  // font-size: 1.2rem;
+  cursor: pointer;
+  border: 2px solid $ERROR;
+  border-radius: 50%;
+  width: 1.7rem;
+  height: 1.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  // font-size: 0.7rem;
+  // z-index: 10;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem;
+  text-align: center;
+}
+
+.modalButtons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.cancelButton {
+  background-color: #ccc;
+  color: #333;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.deleteButton {
+  background-color: #e74c3c;
+  color: #fff;
+  width: 6rem;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.deleteButton:hover {
+  background-color: #c0392b;
+}
+
+.liked {
+  color: $ERROR;
 }

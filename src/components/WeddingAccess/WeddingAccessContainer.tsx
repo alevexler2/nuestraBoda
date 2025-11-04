@@ -4,7 +4,7 @@ import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "../../config/firebaseConfig";
 
 const WeddingAccessContainer = ({
-  setAccessGranted,
+  setAccessGranted, event
 }: WeddingAccesInterfaceContainer) => {
   const loginWithGoogle = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
@@ -15,6 +15,7 @@ const WeddingAccessContainer = ({
       setAccessGranted(true);
       localStorage.setItem("accessGranted", "true");
       localStorage.setItem("userName", user.displayName || "");
+      localStorage.setItem("userEmail", user.email || "");
     } catch (err) {
       console.error("Error al iniciar sesión:", err);
     }
@@ -22,7 +23,7 @@ const WeddingAccessContainer = ({
 
   return (
     <WeddingAccesDesktop
-      loginWithGoogle={loginWithGoogle}
+      loginWithGoogle={loginWithGoogle} event={event}
     />
   );
 };

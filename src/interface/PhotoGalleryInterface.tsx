@@ -1,4 +1,5 @@
 import type { JSX, RefObject } from "react";
+import type { EventInterface } from "./EventInterface";
 
 export interface CloudinaryFile {
   public_id: string;
@@ -6,7 +7,9 @@ export interface CloudinaryFile {
   format: string;
   type: string;
   uploaded_by?: string;
+  ownerEmail: string;
   mediaType?: 'image' | 'video';
+  MediaFileID: string;
 }
 
 export interface PhotoGalleryInterface {
@@ -15,4 +18,5 @@ export interface PhotoGalleryInterface {
   setAccessGranted: (value: boolean) => void;
   openGallery: () => void;
   fileInputRef: RefObject<HTMLInputElement | null>;
+  event: EventInterface;
 }

@@ -15,10 +15,11 @@ const PhotoGalerryDesktop = ({
   setAccessGranted,
   openGallery,
   fileInputRef,
+  event,
 }: PhotoGalleryInterface) => {
   return (
     <div className={styles.container}>
-      <HeaderContainer setAccessGranted={setAccessGranted} />
+      <HeaderContainer setAccessGranted={setAccessGranted} event={event}/>
       <DividerContainer />
       <h2>¡Bienvenidos a nuestro álbum de boda!</h2>
       <p>

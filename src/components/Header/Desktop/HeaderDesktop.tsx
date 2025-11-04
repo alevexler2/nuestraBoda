@@ -2,18 +2,18 @@ import styles from "./styles.module.scss";
 import colors from "../../../assets/_themes-vars.module.scss";
 import { Heart } from "lucide-react";
 import AvatarContainer from "../../Avatar/AvatarContainer";
-import type { HeaderInterfaceContainer } from "../../../interface/HeaderInterfaceContainer";
 import { LogOut } from "lucide-react";
+import type { HeaderInterface } from "../../../interface/HeaderInterface";
 
-const HeaderDesktop = ({ logout }: HeaderInterfaceContainer) => {
+const HeaderDesktop = ({ logout, event }: HeaderInterface) => {
   return (
     <div className={styles.container}>
       <div className={styles.containerLeft}>
         <Heart fill={colors.backgroundBtn} strokeWidth={0} size={24} />
-        <h2>{import.meta.env.VITE_SITE_NAME}</h2>
+        <h2>{event.EventName}</h2>
       </div>
       <div className={styles.containerRight}>
-        <p>Ale & Cande</p>
+        <p>{event.Subtitle}</p>
         <AvatarContainer />
         <LogOut
           size={24}
