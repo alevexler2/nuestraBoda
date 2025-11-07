@@ -4,6 +4,7 @@ export interface MediaCardInterface {
   subtitle: string
   imageUrl: string
   cardRef: React.RefObject<HTMLDivElement | null>
+  commentsRef: React.RefObject<HTMLDivElement | null>
   mediaType?: 'image' | 'video';
   owner: boolean;
   onDelete: (e: React.MouseEvent) => void;
@@ -11,7 +12,7 @@ export interface MediaCardInterface {
   showAlertModal: boolean;
   isLoading: boolean;
   setShowAlertModal: (value: boolean) => void;
-  handleLike: () => void;
+  handleLike: (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => void;
   likesCount: number,
   isLikedByUser: boolean,
   viewComments: boolean,

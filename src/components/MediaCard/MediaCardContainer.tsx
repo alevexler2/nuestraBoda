@@ -15,48 +15,50 @@ const MediaCardContainer = ({
   setRefreshFlag,
   MediaFileID,
 }: MediaCardInterfaceContainer) => {
-  const [showAlertModal, setShowAlertModal] = useState(false)
   const { isMdDown, isLgDown } = useBreakpoints();
+  const [showAlertModal, setShowAlertModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [likes, setLikes] = useState<any[]>([])
+  const [likes, setLikes] = useState<any[]>([]);
   const [isLikedByUser, setIsLikedByUser] = useState(false);
   const [viewComments, setViewComments] = useState(false);
   const [value, setValue] = useState("");
   const [comments, setComments] = useState([]);
 
   const cardRef = useRef<HTMLDivElement>(null);
+  const commentsRef = useRef<HTMLDivElement>(null);
 
   const onDelete = async (e: MouseEvent) => {
-    e.stopPropagation()
-    setShowAlertModal(true)
+    e.stopPropagation();
+    setShowAlertModal(true);
   };
 
   const handleShowComments = () => {
-    setViewComments(!viewComments)
-  }
+    setViewComments(!viewComments);
+  };
 
   const handleDelete = async () => {
     if (!imageUrl) return;
     try {
-      setIsLoading(true)
+      setIsLoading(true);
       const result = await api.deleteMediaFile(imageUrl);
       if (result.success) {
-        setRefreshFlag(true)
+        setRefreshFlag(true);
       }
     } catch (err) {
       console.error("Error al eliminar archivo:", err);
       alert("Ocurrió un error al eliminar el archivo");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
-  const handleLike = async () => {
+  const handleLike = async (e: React.MouseEvent<SVGSVGElement, globalThis.MouseEvent>) => {
     try {
+      e.stopPropagation()
       const userName = localStorage.getItem("userEmail") || "Invitado";
 
       await api.toggleLike(MediaFileID, userName);
-      fetchLikes()
+      fetchLikes();
     } catch (error) {
       console.error("Error al dar like:", error);
     }
@@ -67,31 +69,31 @@ const MediaCardContainer = ({
     await api.createMediaFileComment({
       MediaFileID,
       UserEmail,
-      CommentText: value
+      CommentText: value,
     });
-    setValue("")
-    fetchComments()
-  }
+    setValue("");
+    fetchComments();
+  };
 
   const fetchLikes = async () => {
     try {
       if (MediaFileID) {
         const likes = await api.getLikesByMediaFile(MediaFileID);
-        setLikes(likes)
+        setLikes(likes);
       }
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   const fetchComments = async () => {
-    if(MediaFileID) {
+    if (MediaFileID) {
       const comments = await api.getCommentsByMediaFile(MediaFileID);
-      setComments(comments)
+      setComments(comments);
     }
-  }
+  };
 
-  const renderComments = (styles:any) => {
+  const renderComments = (styles: any) => {
     const currentUser = localStorage.getItem("userEmail") || "Invitado";
 
     return comments.map((comment: any) => {
@@ -100,8 +102,9 @@ const MediaCardContainer = ({
       return (
         <div
           key={comment.ID}
-          className={`${styles.commentPreview} ${isOwnComment ? styles.ownComment : ""
-            }`}
+          className={`${styles.commentPreview} ${
+            isOwnComment ? styles.ownComment : ""
+          }`}
         >
           <div className={styles.userNameContainer}>
             <User size={18} strokeWidth={1.8} />
@@ -116,14 +119,30 @@ const MediaCardContainer = ({
   };
 
   useEffect(() => {
-    fetchLikes()
-    fetchComments()
-  }, [])
+    fetchLikes();
+    fetchComments();
+  }, []);
 
   useEffect(() => {
-      const userName = localStorage.getItem("userEmail")
-      setIsLikedByUser(likes.some(like => like.UserEmail === userName));
+    const userName = localStorage.getItem("userEmail");
+    setIsLikedByUser(likes.some((like) => like.UserEmail === userName));
   }, [likes]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: globalThis.MouseEvent) => {
+      if (
+        commentsRef.current &&
+        !commentsRef.current.contains(event.target as Node)
+      ) {
+        setViewComments(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const commonProps = {
     subtitle,
@@ -146,6 +165,7 @@ const MediaCardContainer = ({
     handleSendComment,
     renderComments,
     comments,
+    commentsRef,
   };
 
   return (
