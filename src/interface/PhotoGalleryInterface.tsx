@@ -2,14 +2,16 @@ import type { JSX, RefObject } from "react";
 import type { EventInterface } from "./EventInterface";
 
 export interface CloudinaryFile {
+  ID: string;
   public_id: string;
-  url: string;
+  URL: string;
   format: string;
   type: string;
-  uploaded_by?: string;
+  UploadedBy?: string;
   ownerEmail: string;
-  mediaType?: 'image' | 'video';
+  MediaTypeID?: number;
   MediaFileID: string;
+  data: Base64URLString
 }
 
 export interface PhotoGalleryInterface {

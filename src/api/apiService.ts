@@ -21,9 +21,11 @@ class ApiService {
     return ApiService.instance;
   }
 
-  public async getImages() {
+  public async getImages(eventId: string) {
     try {
-      const response = await this.axiosInstance.get("api/cloudinary/mi-boda");
+      const response = await this.axiosInstance.get(
+        `api/media-file/event/${eventId}`
+      );
       return response.data;
     } catch (error) {
       console.error("Error fetching images:", error);
@@ -42,16 +44,22 @@ class ApiService {
   }
 
   public async createMediaFile(createDto: {
-    URL: string;
+    file: File; // 👈 agregamos el archivo
+    URL?: string;
     MediaTypeID: number;
     UploadedBy: string;
     EventID?: string;
   }) {
     try {
-      const response = await this.axiosInstance.post(
-        "api/media-file",
-        createDto
-      );
+      const formData = new FormData();
+      formData.append("file", createDto.file);
+      formData.append("MediaTypeID", createDto.MediaTypeID.toString());
+      formData.append("UploadedBy", createDto.UploadedBy);
+      if (createDto.EventID) formData.append("EventID", createDto.EventID);
+      if (createDto.URL) formData.append("URL", createDto.URL);
+
+      const response = await axios.post("api/media-file", formData);
+
       return response.data;
     } catch (error) {
       console.error("Error creating media file:", error);
@@ -59,14 +67,14 @@ class ApiService {
     }
   }
 
-  public async deleteMediaFile(url: string) {
+  public async deleteMediaFile(mediaFileId: string) {
     try {
-      const response = await this.axiosInstance.delete("api/cloudinary", {
-        data: { url },
-      });
+      const response = await this.axiosInstance.delete(
+        `api/media-file/${mediaFileId}`
+      );
       return response.data;
     } catch (error) {
-      console.error(`Error deleting media file with URL ${url}:`, error);
+      console.error(`Error deleting media file with ID ${mediaFileId}:`, error);
       throw error;
     }
   }

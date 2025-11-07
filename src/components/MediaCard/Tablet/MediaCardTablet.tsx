@@ -34,11 +34,11 @@ const MediaCardTablet = ({
         <div className={styles.uploaderOverlay}>
           <span>{subtitle}</span>
         </div>
-        {mediaType === "image" && (
+        {mediaType === 1 && (
           <img src={imageUrl} alt={subtitle} className={styles.media} />
         )}
 
-        {mediaType === "video" && (
+        {mediaType === 2 && (
           <video className={styles.media} src={imageUrl} controls />
         )}
 
@@ -56,6 +56,7 @@ const MediaCardTablet = ({
       </div>
 
       <div
+        ref={commentsRef}
         className={`${styles.cardLower} ${
           viewComments ? styles.showComments : ""
         }`}
@@ -85,7 +86,7 @@ const MediaCardTablet = ({
         </div>
 
         {viewComments ? (
-          <div ref={commentsRef} className={styles.commentsContainer}>
+          <div className={styles.commentsContainer}>
             <div className={styles.commets}>{renderComments(styles)}</div>
             <CustomInputContainer
               placeholder="Ingresa un comentario"

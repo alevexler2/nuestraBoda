@@ -34,11 +34,11 @@ const MediaCardDesktop = ({
         <div className={styles.uploaderOverlay}>
           <span>{subtitle}</span>
         </div>
-        {mediaType === "image" && (
+        {mediaType === 1 && (
           <img src={imageUrl} alt={subtitle} className={styles.media} />
         )}
 
-        {mediaType === "video" && (
+        {mediaType === 2 && (
           <video className={styles.media} src={imageUrl} controls />
         )}
 

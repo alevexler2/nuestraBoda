@@ -40,7 +40,7 @@ const MediaCardContainer = ({
     if (!imageUrl) return;
     try {
       setIsLoading(true);
-      const result = await api.deleteMediaFile(imageUrl);
+      const result = await api.deleteMediaFile(MediaFileID);
       if (result.success) {
         setRefreshFlag(true);
       }

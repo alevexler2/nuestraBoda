@@ -5,7 +5,7 @@ export interface MediaCardInterface {
   imageUrl: string
   cardRef: React.RefObject<HTMLDivElement | null>
   commentsRef: React.RefObject<HTMLDivElement | null>
-  mediaType?: 'image' | 'video';
+  mediaType?: number;
   owner: boolean;
   onDelete: (e: React.MouseEvent) => void;
   handleDelete: () => void;

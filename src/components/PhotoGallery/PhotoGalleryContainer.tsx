@@ -7,7 +7,7 @@ import MediaCardContainer from "../MediaCard/MediaCardContainer";
 import { Oval } from "react-loader-spinner";
 import colors from "../../assets/_themes-vars.module.scss";
 import styles from "./Desktop/styles.module.scss";
-import { MAX_SIZE, MEDIA_TYPE_ID } from "../../common/constants";
+import { MEDIA_TYPE_ID } from "../../common/constants";
 import type { PhotoGalleryContainerInterface } from "../../interface/PhotoFalleryContainerInterface";
 
 const PhotoGalleryContainer = ({ setAccessGranted, event }: PhotoGalleryContainerInterface) => {
@@ -38,61 +38,29 @@ const PhotoGalleryContainer = ({ setAccessGranted, event }: PhotoGalleryContaine
     return MEDIA_TYPE_ID.IMAGE;
   }
 
-
-  const handleUpload = async (filesToUpload: File[]) => {
+   const handleUpload = async (filesToUpload: File[]) => {
     if (filesToUpload.length === 0) return;
-    setIsLoading(true)
-    const uploadedUrls: string[] = [];
+    setIsLoading(true);
 
     try {
       const pathSegments = window.location.pathname.split("/").filter(Boolean);
       const eventId = pathSegments[pathSegments.length - 1];
-      const uploadedBy = localStorage.getItem("userName") || "sin-nombre";
       for (const file of filesToUpload) {
-        if (file.size > MAX_SIZE) {
-          alert(
-            `El archivo ${file.name} supera los 100 MB y no se puede subir.`
-          );
-          continue;
-        }
-        const extension = file.name.split(".").pop();
-        const baseName = file.name.replace(/\.[^/.]+$/, "");
-        const newFileName = `${baseName}_*${uploadedBy}*`;
-
-        const formData = new FormData();
-        formData.append("file", file, `${newFileName}.${extension}`);
-        formData.append(
-          "upload_preset",
-          import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
-        );
-        formData.append("folder", "mi_boda");
-
-        const res = await fetch(
-          `https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
-          }/auto/upload`,
-          { method: "POST", body: formData }
-        );
-
-        const data = await res.json();
-        console.log("Archivo subido:", data.secure_url);
-        uploadedUrls.push(data.secure_url);
-
         const mediaType = getMediaType(file);
 
         await api.createMediaFile({
-          URL: data.secure_url,
+          file,
           MediaTypeID: mediaType,
           UploadedBy: savedName,
           EventID: eventId,
         });
       }
 
-      console.log("Archivos subidos:", uploadedUrls);
-
       setRefreshFlag((prev) => !prev);
     } catch (err) {
       console.error("Error al subir archivos:", err);
-      setIsLoading(false)
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -101,7 +69,7 @@ const PhotoGalleryContainer = ({ setAccessGranted, event }: PhotoGalleryContaine
       try {
         setIsLoading(true)
         setRefreshFlag(false)
-        const data = await api.getImages();
+        const data = await api.getImages(event.ID);
         setFiles(data);
       } catch (err) {
         console.error("Error fetching images:", err);
@@ -110,8 +78,9 @@ const PhotoGalleryContainer = ({ setAccessGranted, event }: PhotoGalleryContaine
       }
     };
 
-    fetchImages();
-  }, [refreshFlag]);
+    if(event.ID)fetchImages();
+
+  }, [refreshFlag, event]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -147,13 +116,13 @@ const PhotoGalleryContainer = ({ setAccessGranted, event }: PhotoGalleryContaine
     return files.map((file) => {
       return (
         <MediaCardContainer
-          key={file.public_id}
-          subtitle={`Subido por ${file.uploaded_by}`}
-          imageUrl={file.url}
-          mediaType={file.mediaType}
-          owner={file.ownerEmail === savedName}
+          key={file.ID}
+          subtitle={`Subido por ${file.UploadedBy}`}
+          imageUrl={`${import.meta.env.VITE_API_URL}${file.URL}`}
+          mediaType={file.MediaTypeID}
+          owner={file.UploadedBy === savedName}
           setRefreshFlag={setRefreshFlag}
-          MediaFileID={file.MediaFileID}
+          MediaFileID={file.ID}
         />
       );
     });
