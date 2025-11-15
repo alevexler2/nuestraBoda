@@ -10,6 +10,7 @@
   background-color: black;
   transition: transform 0.3s ease;
   position: relative;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.45);
 }
 
 .mediaWrapper {
@@ -25,7 +26,6 @@
   background-color: black;
 }
 
-
 .uploaderOverlay {
   position: absolute;
   top: 0;
@@ -38,7 +38,6 @@
   backdrop-filter: blur(4px);
 }
 
-
 .cardLower {
   position: absolute;
   bottom: 0;
@@ -50,7 +49,7 @@
   flex-direction: column;
   gap: 0.5rem;
   padding: 1rem;
-  max-height: 40%;
+  height: 16%;
   overflow: hidden;
   transition: max-height 0.3s ease;
 
@@ -96,11 +95,10 @@
 
       .userName {
         font-weight: 700;
-        color: #ffb86a;;
+        color: #ffb86a;
         width: auto;
       }
     }
-
 
     p {
       width: 60%;
@@ -119,11 +117,13 @@
 
       .userName {
         font-weight: 700;
-        color: $TEXT_GOLD;;
+        color: $TEXT_GOLD;
         width: auto;
+        &.isLastCommentOwn {
+          color: $LIGHT_BLUE;
+        }
       }
     }
-
 
     p {
       width: 60%;
@@ -215,4 +215,62 @@
 
 .viewAllComments {
   cursor: pointer;
+}
+
+.likeIconWrapper {
+  position: relative;
+  display: inline-flex;
+  cursor: pointer;
+
+  svg {
+    pointer-events: none;
+  }
+}
+
+.likeNumber {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  background-color: $LIGHT_ORANGE;
+  color: $TEXT_BTN;
+  font-size: 0.6rem;
+  font-weight: 700;
+  border-radius: 50%;
+  width: 1rem;
+  height: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.commentIconWrapper {
+  position: relative;
+  display: inline-flex;
+  cursor: pointer;
+
+  svg {
+    pointer-events: none;
+  }
+}
+
+.commentsBadge {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  background-color: $LIGHT_ORANGE;
+  color: $TEXT_BTN;
+  font-size: 0.6rem;
+  font-weight: 700;
+  border-radius: 50%;
+  width: 1rem;
+  height: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.isLastCommentOwn {
+  color: $LIGHT_BLUE;
 }

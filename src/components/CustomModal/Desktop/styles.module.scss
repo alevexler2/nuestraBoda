@@ -15,7 +15,7 @@
 
 .container {
   position: relative;
-  background: $BACKGROUND_LIGHT;
+  background: $BACKGROUND_DARK;
   border-radius: 8px;
   padding: 1rem;
   max-width: 90vw;
@@ -26,14 +26,15 @@
 }
 
 .closeButton {
+  color: $TEXT_GOLD;
   position: absolute;
   top: 0.5rem;
   right: 0.5rem;
   border: none;
-  background: $BACKGROUND_LIGHT;
+  background: $BACKGROUND_DARK;
   font-size: 1.2rem;
   cursor: pointer;
-  border: 2px solid $BACKGROUN_BTN;
+  border: 2px solid $BACKGROUND_LIGHT;
   border-radius: 50%;
   width: 1.7rem;
   height: 1.7rem;

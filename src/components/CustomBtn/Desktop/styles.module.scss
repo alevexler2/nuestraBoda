@@ -12,8 +12,8 @@
   padding: 0 1.25rem;
   
   border-radius: 2rem;
-  background-color: $BACKGROUN_BTN;
-  color: $TEXT_BTN;
+  background-color: $BACKGROUND_LIGHT;
+  color: $TEXT_PRIMARY;
   
   font-size: 1rem;
   font-weight: 700;
@@ -32,7 +32,7 @@
 }
 
 .container:hover {
-  background-color: $BACKGROUN_BTN_HOVER;
+  background-color: $BACKGROUND_LIGHT_HOVER;
 }
 
 .container span {

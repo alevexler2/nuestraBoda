@@ -22,7 +22,13 @@ const MediaCardContainer = ({
   const [isLikedByUser, setIsLikedByUser] = useState(false);
   const [viewComments, setViewComments] = useState(false);
   const [value, setValue] = useState("");
-  const [comments, setComments] = useState([]);
+  const [comments, setComments] = useState<any[]>([]);
+
+  const currentUser = localStorage.getItem("userEmail") || "Invitado";
+
+  const isLastCommentOwn =
+    comments.length > 0 &&
+    comments[comments.length - 1]?.UserEmail === currentUser;
 
   const cardRef = useRef<HTMLDivElement>(null);
   const commentsRef = useRef<HTMLDivElement>(null);
@@ -52,9 +58,9 @@ const MediaCardContainer = ({
     }
   };
 
-  const handleLike = async (e: React.MouseEvent<SVGSVGElement, globalThis.MouseEvent>) => {
+  const handleLike = async (e: React.MouseEvent<HTMLElement>) => {
     try {
-      e.stopPropagation()
+      e.stopPropagation();
       const userName = localStorage.getItem("userEmail") || "Invitado";
 
       await api.toggleLike(MediaFileID, userName);
@@ -107,7 +113,11 @@ const MediaCardContainer = ({
           }`}
         >
           <div className={styles.userNameContainer}>
-            <User size={18} strokeWidth={1.8} />
+            <User
+              size={18}
+              strokeWidth={1.8}
+              className={isOwnComment ? styles.isOwnComment : styles.icon}
+            />
             <p className={styles.userName}>
               {isOwnComment ? "Yo" : comment.UserEmail}:
             </p>
@@ -166,6 +176,7 @@ const MediaCardContainer = ({
     renderComments,
     comments,
     commentsRef,
+    isLastCommentOwn
   };
 
   return (

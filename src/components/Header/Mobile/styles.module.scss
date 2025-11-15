@@ -3,6 +3,7 @@
 .container {
   height: 10vh;
   display: flex;
+  padding: 0 3%;
   justify-content: space-between;
   align-items: center;
 
@@ -17,10 +18,10 @@
         font-weight: 700;
         line-height: 1.25;
         letter-spacing: -0.015em;
-        color: $TEXT_PRIMARY;
+        color: $TEXT_BTN;
       }
       p {
-        color: $TEXT_PRIMARY;
+        color: $TEXT_GOLD;
         font-size: 0.875rem;
         font-weight: 500;
         line-height: 1.5;

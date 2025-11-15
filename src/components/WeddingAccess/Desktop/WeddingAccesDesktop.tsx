@@ -13,9 +13,9 @@ const WeddingAccesDesktop = ({
     <div className={styles.container}>
       <AvatarContainer big={true} />
       <div className={styles.titleContainer}>
-        <Heart fill={colors.backgroundBtn} strokeWidth={0} size={24} />
+        <Heart fill={colors.error} strokeWidth={0} size={24} />
         <h1>{event.EventName}</h1>
-        <Heart fill={colors.backgroundBtn} strokeWidth={0} size={24} />
+        <Heart fill={colors.error} strokeWidth={0} size={24} />
       </div>
       <h4>{event.Subtitle}</h4>
       <form onSubmit={loginWithGoogle}>

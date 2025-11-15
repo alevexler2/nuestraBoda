@@ -27,6 +27,7 @@ const MediaCardTablet = ({
   renderComments,
   comments,
   commentsRef,
+  isLastCommentOwn,
 }: MediaCardInterface) => {
   return (
     <div ref={cardRef} className={styles.container}>
@@ -62,26 +63,34 @@ const MediaCardTablet = ({
         }`}
       >
         <div className={styles.actions}>
-          <Heart
-            size={18}
-            strokeWidth={1.8}
-            onClick={handleLike}
-            className={isLikedByUser ? styles.liked : ""}
-          />
-          <MessageCircle
-            size={18}
-            strokeWidth={1.8}
+          <div className={styles.likeIconWrapper} onClick={handleLike}>
+            <Heart
+              size={18}
+              strokeWidth={1.8}
+              className={isLikedByUser ? styles.liked : ""}
+            />
+            {likesCount > 0 && (
+              <span className={styles.likeNumber}>{likesCount}</span>
+            )}
+          </div>
+          <div
+            className={styles.commentIconWrapper}
             onClick={handleShowComments}
-          />
+          >
+            <MessageCircle size={18} strokeWidth={1.8} />
+            {comments.length > 0 && (
+              <span className={styles.commentsBadge}>{comments.length}</span>
+            )}
+          </div>
         </div>
         <div className={`${styles.likesCount}`}>
           {likesCount > 0 ? (
             <span>
               {likesCount} persona{likesCount > 1 ? "s" : ""} di
-              {likesCount > 1 ? "eron" : "o"} "me gusta"
+              {likesCount > 1 ? "eron" : "o"} "Like"
             </span>
           ) : (
-            <span>¡Sé el primero en dar "me gusta"! 😄</span>
+            <span>¡Sé el primero en dar "Like"! 😄</span>
           )}
         </div>
 
@@ -97,12 +106,23 @@ const MediaCardTablet = ({
           </div>
         ) : (
           <>
-            <div className={styles.lastCommentPreview}>
+            <div
+              className={`${styles.lastCommentPreview} ${
+                isLastCommentOwn ? styles.isLastCommentOwn : ""
+              } `}
+            >
               {comments.length > 0 && (
                 <div className={styles.userNameContainer}>
-                  <User size={18} strokeWidth={1.8} />
-                  <p className={styles.userName}>
-                    {comments[comments.length - 1]?.UserEmail}:
+                  <User size={18} strokeWidth={1.8} className={isLastCommentOwn ? styles.isLastCommentOwn : ""}/>
+                  <p
+                    className={`${styles.userName} ${
+                      isLastCommentOwn ? styles.isLastCommentOwn : ""
+                    }`}
+                  >
+                    {isLastCommentOwn
+                      ? "Yo"
+                      : comments[comments.length - 1]?.UserEmail}
+                    :{}
                   </p>
                 </div>
               )}

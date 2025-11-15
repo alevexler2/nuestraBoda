@@ -12,10 +12,11 @@ export interface MediaCardInterface {
   showAlertModal: boolean;
   isLoading: boolean;
   setShowAlertModal: (value: boolean) => void;
-  handleLike: (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => void;
+  handleLike: (e: React.MouseEvent<HTMLElement>) => void;
   likesCount: number,
   isLikedByUser: boolean,
   viewComments: boolean,
+  isLastCommentOwn: boolean,
   handleShowComments: () => void;
   value: string;
   setValue: (value:string) => void;

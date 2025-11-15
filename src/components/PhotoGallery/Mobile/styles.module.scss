@@ -7,6 +7,9 @@
 
   .bannner { 
     padding: 0 3%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
   }
 
   h2 {
@@ -14,7 +17,7 @@
     font-weight: 900;
     line-height: 1.25;
     letter-spacing: -0.033em;
-    color: $TEXT_BTN;
+    color: $TEXT_BTN
   }
 
   p {
@@ -29,7 +32,6 @@
   display: flex; 
   justify-content: space-evenly;
   flex-wrap: wrap;
-  gap: 2rem;
 }
 
 .modalContainer {
@@ -169,25 +171,15 @@
   height: 50vh;
 }
 
-.progressWrapper {
-  width: 100%;
-  padding: 2rem 0;
-  text-align: center;
-  color: white;
-}
-
-.progressBarBg {
-  width: 60%;
-  height: 8px;
-  background: rgba(255, 255, 255, 0.2);
-  margin: 0.5rem auto;
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.progressBarFill {
-  height: 100%;
-  background: #ffb86a;
-  width: 0%;
-  transition: width 0.25s ease;
+.footer {
+  background-color: $BACKGROUND_DARK;
+  position: fixed;
+  bottom: 0;          // Pega al fondo
+  left: 0;            // Alinea al borde izquierdo
+  width: 100vw;       // Todo el ancho
+  height: 8vh;       // 10% de la altura de la pantalla
+  display: flex;      // Opcional, para centrar contenido
+  align-items: center;
+  justify-content: center;
+  z-index: 100;       // Para que esté encima de otros elementos
 }

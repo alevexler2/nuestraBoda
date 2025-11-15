@@ -10,6 +10,7 @@
   background-color: black;
   transition: transform 0.3s ease;
   position: relative;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.45);
 }
 
 .mediaWrapper {
@@ -25,7 +26,6 @@
   background-color: black;
 }
 
-
 .uploaderOverlay {
   position: absolute;
   top: 0;
@@ -38,7 +38,6 @@
   backdrop-filter: blur(4px);
 }
 
-
 .cardLower {
   position: absolute;
   bottom: 0;
@@ -50,7 +49,7 @@
   flex-direction: column;
   gap: 0.5rem;
   padding: 1rem;
-  max-height: 40%;
+  height: 17%;
   overflow: hidden;
   transition: max-height 0.3s ease;
 
@@ -102,12 +101,11 @@
         font-weight: 700;
         color: #ffb86a;
         width: auto;
-        white-space: nowrap; 
+        white-space: nowrap;
         overflow: hidden;
-        text-overflow: ellipsis; 
+        text-overflow: ellipsis;
       }
     }
-
 
     p {
       font-size: 0.75rem;
@@ -131,11 +129,12 @@
         font-size: 0.75rem;
         font-weight: 700;
         color: $TEXT_GOLD;
-        ;
         width: auto;
+        &.isLastCommentOwn {
+          color: $LIGHT_BLUE;
+        }
       }
     }
-
 
     p {
       font-size: 0.75rem;
@@ -228,4 +227,62 @@
 
 .viewAllComments {
   font-size: 0.75rem;
+}
+
+.commentIconWrapper {
+  position: relative;
+  display: inline-flex;
+  cursor: pointer;
+
+  svg {
+    pointer-events: none;
+  }
+}
+
+.commentsBadge {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  background-color: $LIGHT_ORANGE;
+  color: $TEXT_BTN;
+  font-size: 0.6rem;
+  font-weight: 700;
+  border-radius: 50%;
+  width: 1rem;
+  height: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.likeIconWrapper {
+  position: relative;
+  display: inline-flex;
+  cursor: pointer;
+
+  svg {
+    pointer-events: none;
+  }
+}
+
+.likeNumber {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  background-color: $LIGHT_ORANGE;
+  color: $TEXT_BTN;
+  font-size: 0.6rem;
+  font-weight: 700;
+  border-radius: 50%;
+  width: 1rem;
+  height: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.isLastCommentOwn {
+  color: $LIGHT_BLUE;
 }

@@ -43,22 +43,37 @@ class ApiService {
     }
   }
 
-  public async createMediaFile(createDto: {
-    file: File; // 👈 agregamos el archivo
-    URL?: string;
-    MediaTypeID: number;
-    UploadedBy: string;
-    EventID?: string;
-  }) {
+  public async createMediaFile(
+    createDto: {
+      file: File;
+      URL?: string;
+      MediaTypeID: number;
+      UploadedBy: string;
+      EventID?: string;
+    },
+    onProgress?: (progress: number) => void
+  ) {
     try {
       const formData = new FormData();
+
       formData.append("file", createDto.file);
       formData.append("MediaTypeID", createDto.MediaTypeID.toString());
       formData.append("UploadedBy", createDto.UploadedBy);
+
       if (createDto.EventID) formData.append("EventID", createDto.EventID);
       if (createDto.URL) formData.append("URL", createDto.URL);
 
-      const response = await axios.post("api/media-file", formData);
+      const response = await axios.post("/api/media-file", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        onUploadProgress: (evt) => {
+          if (onProgress && evt.total && evt.total > 0) {
+            const percent = Math.round((evt.loaded * 100) / evt.total );
+            onProgress(percent);
+          }
+        },
+      });
 
       return response.data;
     } catch (error) {

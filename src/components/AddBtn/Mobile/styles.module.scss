@@ -1,0 +1,23 @@
+@use "../../../assets/themes-vars.module" as *;
+
+.addBtn {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.5rem;      // esquinas redondeadas tipo Instagram
+  background-color: black;   // fondo negro
+  border: 2px solid $TEXT_BTN;   // borde blanco
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;           
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: scale(1.05);  // efecto hover
+  }
+
+  &:active {
+    transform: scale(0.95);  // efecto click
+  }
+}

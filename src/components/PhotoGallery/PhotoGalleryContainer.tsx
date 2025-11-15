@@ -9,13 +9,22 @@ import colors from "../../assets/_themes-vars.module.scss";
 import styles from "./Desktop/styles.module.scss";
 import { MEDIA_TYPE_ID } from "../../common/constants";
 import type { PhotoGalleryContainerInterface } from "../../interface/PhotoFalleryContainerInterface";
+import useBreakpoints from "../../hooks/useBreakpoints";
+import PhotoGalerryMobile from "./Mobile/PhotoGalerryMobile";
 
-const PhotoGalleryContainer = ({ setAccessGranted, event }: PhotoGalleryContainerInterface) => {
+const PhotoGalleryContainer = ({
+  setAccessGranted,
+  event,
+}: PhotoGalleryContainerInterface) => {
   const [isLoading, setIsLoading] = useState(true);
+  const [uploadProgress, setUploadProgress] = useState<Record<string, number>>(
+    {}
+  );
   const [files, setFiles] = useState<CloudinaryFile[]>([]);
   const [refreshFlag, setRefreshFlag] = useState(false);
   const activeCardRef = useRef<HTMLDivElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const { isMdDown } = useBreakpoints();
   const savedName = localStorage.getItem("userEmail") || "sin-nombre";
 
   const openGallery = () => {
@@ -26,7 +35,7 @@ const PhotoGalleryContainer = ({ setAccessGranted, event }: PhotoGalleryContaine
     if (e.target.files) {
       const files = Array.from(e.target.files);
       handleUpload(files);
-      e.target.value = '';
+      e.target.value = "";
     }
   };
 
@@ -38,7 +47,7 @@ const PhotoGalleryContainer = ({ setAccessGranted, event }: PhotoGalleryContaine
     return MEDIA_TYPE_ID.IMAGE;
   }
 
-   const handleUpload = async (filesToUpload: File[]) => {
+  const handleUpload = async (filesToUpload: File[]) => {
     if (filesToUpload.length === 0) return;
     setIsLoading(true);
 
@@ -46,16 +55,32 @@ const PhotoGalleryContainer = ({ setAccessGranted, event }: PhotoGalleryContaine
       const pathSegments = window.location.pathname.split("/").filter(Boolean);
       const eventId = pathSegments[pathSegments.length - 1];
       for (const file of filesToUpload) {
+        const id = file.name;
+
+        setUploadProgress((prev) => ({
+          ...prev,
+          [id]: 0,
+        }));
+
         const mediaType = getMediaType(file);
 
-        await api.createMediaFile({
-          file,
-          MediaTypeID: mediaType,
-          UploadedBy: savedName,
-          EventID: eventId,
-        });
+        await api.createMediaFile(
+          {
+            file,
+            MediaTypeID: mediaType,
+            UploadedBy: savedName,
+            EventID: eventId,
+          },
+          (percent) => {
+            setUploadProgress((prev) => ({
+              ...prev,
+              [id]: percent,
+            }));
+          }
+        );
       }
 
+      setUploadProgress({});
       setRefreshFlag((prev) => !prev);
     } catch (err) {
       console.error("Error al subir archivos:", err);
@@ -67,8 +92,8 @@ const PhotoGalleryContainer = ({ setAccessGranted, event }: PhotoGalleryContaine
   useEffect(() => {
     const fetchImages = async () => {
       try {
-        setIsLoading(true)
-        setRefreshFlag(false)
+        setIsLoading(true);
+        setRefreshFlag(false);
         const data = await api.getImages(event.ID);
         setFiles(data);
       } catch (err) {
@@ -78,8 +103,7 @@ const PhotoGalleryContainer = ({ setAccessGranted, event }: PhotoGalleryContaine
       }
     };
 
-    if(event.ID)fetchImages();
-
+    if (event.ID) fetchImages();
   }, [refreshFlag, event]);
 
   useEffect(() => {
@@ -97,6 +121,27 @@ const PhotoGalleryContainer = ({ setAccessGranted, event }: PhotoGalleryContaine
   }, []);
 
   const renderMediaCards = () => {
+    const uploading = Object.keys(uploadProgress).length > 0;
+
+    if (uploading) {
+      const values = Object.values(uploadProgress);
+      const avg =
+        values.length > 0
+          ? Math.round(values.reduce((a, b) => a + b, 0) / values.length)
+          : 0;
+      return (
+        <div className={styles.progressWrapper}>
+          <p>Subiendo archivos... {avg}%</p>
+          <div className={styles.progressBarBg}>
+            <div
+              className={styles.progressBarFill}
+              style={{ width: `${avg}%` }}
+            />
+          </div>
+        </div>
+      );
+    }
+
     if (isLoading) {
       return (
         <div className={styles.loaderContainer}>
@@ -130,14 +175,25 @@ const PhotoGalleryContainer = ({ setAccessGranted, event }: PhotoGalleryContaine
 
   return (
     <Container>
-      <PhotoGalerryDesktop
-        handleFileChange={handleFileChange}
-        renderMediaCards={renderMediaCards}
-        setAccessGranted={setAccessGranted}
-        openGallery={openGallery}
-        fileInputRef={fileInputRef}
-        event={event}
-      />
+      {isMdDown ? (
+        <PhotoGalerryMobile
+          handleFileChange={handleFileChange}
+          renderMediaCards={renderMediaCards}
+          setAccessGranted={setAccessGranted}
+          openGallery={openGallery}
+          fileInputRef={fileInputRef}
+          event={event}
+        />
+      ) : (
+        <PhotoGalerryDesktop
+          handleFileChange={handleFileChange}
+          renderMediaCards={renderMediaCards}
+          setAccessGranted={setAccessGranted}
+          openGallery={openGallery}
+          fileInputRef={fileInputRef}
+          event={event}
+        />
+      )}
     </Container>
   );
 };

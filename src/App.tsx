@@ -16,6 +16,7 @@ function App() {
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   });
+  const [loadingEventData, setLoadingEventData] = useState(true);
 
   useEffect(() => {
     const saved = localStorage.getItem("accessGranted");
@@ -25,26 +26,32 @@ function App() {
     const eventId = pathSegments[pathSegments.length - 1];
 
     if (eventId) {
-      api.getEventById(eventId)
+      api
+        .getEventById(eventId)
         .then((data) => {
           setEvent(data);
         })
         .catch((err) => {
           console.error("Error fetching event:", err);
-        });
+        })
+        .finally(() => setLoadingEventData(false));
     }
-
   }, []);
 
   return (
     <>
       {accessGranted ? (
-        <PhotoGalleryContainer setAccessGranted={setAccessGranted} event={event} />
+        <PhotoGalleryContainer
+          setAccessGranted={setAccessGranted}
+          event={event}
+        />
       ) : (
         <WeddingAccessContainer
           setAccessGranted={setAccessGranted}
           accessGranted={accessGranted}
           event={event}
+          loadingEventData={loadingEventData}
+          setLoadingEventData={setLoadingEventData}
         />
       )}
     </>

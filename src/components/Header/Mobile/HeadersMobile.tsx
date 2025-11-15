@@ -9,7 +9,7 @@ const HeadersMobile = ({ logout, event }: HeaderInterface) => {
   return (
     <div className={styles.container}>
       <div className={styles.containerLeft}>
-        <Heart fill={colors.backgroundBtn} strokeWidth={0} size={24} />
+        <Heart fill={colors.error} strokeWidth={0} size={24} />
         <div>
           <h2>{event.EventName}</h2>
           <p>{event.Subtitle}</p>
