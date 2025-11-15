@@ -32,6 +32,7 @@
   display: flex; 
   justify-content: space-evenly;
   flex-wrap: wrap;
+  padding-bottom: 10vh; 
 }
 
 .modalContainer {
@@ -174,12 +175,11 @@
 .footer {
   background-color: $BACKGROUND_DARK;
   position: fixed;
-  bottom: 0;          // Pega al fondo
-  left: 0;            // Alinea al borde izquierdo
-  width: 100vw;       // Todo el ancho
-  height: 8vh;       // 10% de la altura de la pantalla
-  display: flex;      // Opcional, para centrar contenido
+  bottom: 0;          
+  left: 0;         
+  width: 100vw;       
+  height: 8vh;     
+  display: flex;    
   align-items: center;
   justify-content: center;
-  z-index: 100;       // Para que esté encima de otros elementos
 }
