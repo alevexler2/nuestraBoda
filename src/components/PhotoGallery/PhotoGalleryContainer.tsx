@@ -26,6 +26,7 @@ const PhotoGalleryContainer = ({
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const { isMdDown } = useBreakpoints();
   const savedName = localStorage.getItem("userEmail") || "sin-nombre";
+  const name = localStorage.getItem("userName") || "sin-nombre";
 
   const openGallery = () => {
     fileInputRef.current?.click();
@@ -69,6 +70,7 @@ const PhotoGalleryContainer = ({
             file,
             MediaTypeID: mediaType,
             UploadedBy: savedName,
+            UploadedByName: name,
             EventID: eventId,
           },
           (percent) => {
@@ -162,10 +164,14 @@ const PhotoGalleryContainer = ({
       return (
         <MediaCardContainer
           key={file.ID}
-          subtitle={`Subido por ${file.UploadedBy}`}
+          subtitle={`Subido por ${file.UploadedByName}`}
           imageUrl={`${import.meta.env.VITE_API_URL}${file.URL}`}
           mediaType={file.MediaTypeID}
-          owner={file.UploadedBy === savedName}
+          owner={
+            file.UploadedBy === savedName ||
+            savedName === event.OwnerEmail1 ||
+            savedName === event.OwnerEmail2
+          }
           setRefreshFlag={setRefreshFlag}
           MediaFileID={file.ID}
         />

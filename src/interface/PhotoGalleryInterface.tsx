@@ -8,6 +8,7 @@ export interface CloudinaryFile {
   format: string;
   type: string;
   UploadedBy?: string;
+  UploadedByName?: string;
   ownerEmail: string;
   MediaTypeID?: number;
   MediaFileID: string;

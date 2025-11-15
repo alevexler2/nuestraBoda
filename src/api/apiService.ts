@@ -49,6 +49,7 @@ class ApiService {
       URL?: string;
       MediaTypeID: number;
       UploadedBy: string;
+      UploadedByName: string;
       EventID?: string;
     },
     onProgress?: (progress: number) => void
@@ -59,6 +60,7 @@ class ApiService {
       formData.append("file", createDto.file);
       formData.append("MediaTypeID", createDto.MediaTypeID.toString());
       formData.append("UploadedBy", createDto.UploadedBy);
+      formData.append("UploadedByName", createDto.UploadedByName);
 
       if (createDto.EventID) formData.append("EventID", createDto.EventID);
       if (createDto.URL) formData.append("URL", createDto.URL);
@@ -94,11 +96,12 @@ class ApiService {
     }
   }
 
-  public async toggleLike(mediaFileID: string, UserEmail: string) {
+  public async toggleLike(mediaFileID: string, UserEmail: string, UserName: string) {
     try {
       const response = await this.axiosInstance.post("api/media-file-like", {
         MediaFileID: mediaFileID,
         UserEmail: UserEmail,
+        UserName: UserName,
       });
       return response.data;
     } catch (error) {
@@ -129,6 +132,7 @@ class ApiService {
     MediaFileID: string;
     UserEmail: string;
     CommentText: string;
+    UserName: string;
   }) {
     try {
       const response = await this.axiosInstance.post(

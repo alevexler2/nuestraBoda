@@ -2,7 +2,7 @@ import type { MediaCardInterface } from "../../../interface/MediaCardInterface";
 import CustomModalContainer from "../../CustomModal/CustomModalContainer";
 import styles from "./styles.module.scss";
 import { Oval } from "react-loader-spinner";
-import { Heart, MessageCircle, Trash2, User } from "lucide-react";
+import { Heart, MessageCircle, Trash2, User, X } from "lucide-react";
 import CustomInputContainer from "../../CustomInput/CustomInputContainer";
 
 const MediaCardDesktop = ({
@@ -28,6 +28,11 @@ const MediaCardDesktop = ({
   comments,
   isLastCommentOwn,
   commentsRef,
+  viewLikes,
+  handleShowLikes,
+  renderLikes,
+  handleClose,
+  likes,
 }: MediaCardInterface) => {
   return (
     <div ref={cardRef} className={styles.container}>
@@ -58,45 +63,58 @@ const MediaCardDesktop = ({
 
       <div
         ref={commentsRef}
-        className={`${styles.cardLower} ${
-          viewComments ? styles.showComments : ""
-        }`}
+        className={`${styles.cardLower} 
+    ${viewComments ? styles.showComments : ""} 
+    ${viewLikes ? styles.showLikes : ""}`}
       >
         <div className={styles.actions}>
-          <div className={styles.likeIconWrapper} onClick={handleLike}>
-            <Heart
-              size={18}
-              strokeWidth={1.8}
-              className={isLikedByUser ? styles.liked : ""}
-            />
-            {likesCount > 0 && (
-              <span className={styles.likeNumber}>{likesCount}</span>
-            )}
+          <div className={styles.actionsRight}>
+            <div className={styles.likeIconWrapper} onClick={handleLike}>
+              <Heart
+                size={18}
+                strokeWidth={1.8}
+                className={isLikedByUser ? styles.liked : ""}
+              />
+              {likesCount > 0 && (
+                <span className={styles.likeNumber}>{likesCount}</span>
+              )}
+            </div>
+            <div
+              className={styles.commentIconWrapper}
+              onClick={handleShowComments}
+            >
+              <MessageCircle size={18} strokeWidth={1.8} />
+              {comments.length > 0 && (
+                <span className={styles.commentsBadge}>{comments.length}</span>
+              )}
+            </div>
           </div>
-          <div
-            className={styles.commentIconWrapper}
-            onClick={handleShowComments}
-          >
-            <MessageCircle size={18} strokeWidth={1.8} />
-            {comments.length > 0 && (
-              <span className={styles.commentsBadge}>{comments.length}</span>
-            )}
-          </div>
+          {(viewComments || viewLikes) && <X size={20} onClick={handleClose} />}
         </div>
-        <div className={`${styles.likesCount}`}>
+        <div className={`${styles.likesCount}`} onClick={handleShowLikes}>
           {likesCount > 0 ? (
             <span>
-              {likesCount} persona{likesCount > 1 ? "s" : ""} di
-              {likesCount > 1 ? "eron" : "o"} "Like"
+              {likesCount === 1
+                ? `${likes[0]?.UserName || "Alguien"} dio "me gusta"`
+                : `${likes[0]?.UserName || "Alguien"} y ${
+                    likesCount - 1
+                  } persona${
+                    likesCount - 1 > 1 ? "s" : ""
+                  } más dieron "me gusta"`}
             </span>
           ) : (
-            <span>¡Sé el primero en dar "Like"! 😄</span>
+            <span>¡Sé el primero en dar "me gusta"! 😄</span>
           )}
         </div>
 
-        {viewComments ? (
+        {viewLikes ? (
+          <div className={styles.commentsContainer}>
+            <div className={styles.commets}>{renderLikes(styles)}</div>
+          </div>
+        ) : viewComments ? (
           <div className={styles.commentsContainer}>
             <div className={styles.commets}>{renderComments(styles)}</div>
+
             <CustomInputContainer
               placeholder="Ingresa un comentario"
               value={value}
@@ -109,7 +127,7 @@ const MediaCardDesktop = ({
             <div
               className={`${styles.lastCommentPreview} ${
                 isLastCommentOwn ? styles.isLastCommentOwn : ""
-              } `}
+              }`}
             >
               {comments.length > 0 && (
                 <div className={styles.userNameContainer}>
@@ -125,13 +143,14 @@ const MediaCardDesktop = ({
                   >
                     {isLastCommentOwn
                       ? "Yo"
-                      : comments[comments.length - 1]?.UserEmail}
+                      : comments[comments.length - 1]?.UserName}
                     :{}
                   </p>
                 </div>
               )}
               <p>{comments[comments.length - 1]?.CommentText}</p>
             </div>
+
             <div
               className={styles.viewAllComments}
               onClick={handleShowComments}

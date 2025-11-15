@@ -42,7 +42,7 @@
   left: 0;
   right: 0;
   background: $TEXT_PRIMARY;
-  color: $TEXT_GOLD;
+  color: $LIGHT_ORANGE;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -51,7 +51,7 @@
   overflow: hidden;
   transition: max-height 0.3s ease;
 
-  &.showComments {
+  &.showComments, &.showLikes {
     height: 90%;
     max-height: 90%;
   }
@@ -60,6 +60,11 @@
     display: flex;
     gap: 0.5rem;
     color: $TEXT_BTN;
+    justify-content: space-between;
+    .actionsRight {
+      display: flex;
+      gap: 0.5rem;
+    }
   }
 
   .likesCount {
@@ -129,7 +134,7 @@
       .userName {
         font-size: 0.75rem;
         font-weight: 700;
-        color: $TEXT_GOLD;
+        color: $LIGHT_ORANGE;
         width: auto;
         &.isLastCommentOwn {
           color: $LIGHT_BLUE;
@@ -221,9 +226,14 @@
 
   .commets {
     width: 100%;
+    
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     gap: 1rem;
+        max-height: 50vh; // ajustá el valor
+    overflow-y: auto;
+    padding-right: 0.5rem; // para que no tape el scroll
   }
 }
 
@@ -287,4 +297,15 @@
 
 .isLastCommentOwn {
   color: $LIGHT_BLUE;
+}
+
+.likePreview {
+  display: flex;
+  flex-direction: row;
+  gap: .5rem;
+  padding: .5rem 0;
+}
+
+.userNameLikeContainer {
+  display: flex;
 }

@@ -23,6 +23,7 @@ const MediaCardContainer = ({
   const [viewComments, setViewComments] = useState(false);
   const [value, setValue] = useState("");
   const [comments, setComments] = useState<any[]>([]);
+  const [viewLikes, setViewLikes] = useState(false);
 
   const currentUser = localStorage.getItem("userEmail") || "Invitado";
 
@@ -40,7 +41,18 @@ const MediaCardContainer = ({
 
   const handleShowComments = () => {
     setViewComments(!viewComments);
+    setViewLikes(false);
   };
+  
+  const handleShowLikes = () => {
+    setViewLikes(!viewLikes);
+    setViewComments(false);
+  };
+  
+  const handleClose = () => {
+    setViewLikes(false);
+    setViewComments(false);
+  }
 
   const handleDelete = async () => {
     if (!imageUrl) return;
@@ -61,9 +73,10 @@ const MediaCardContainer = ({
   const handleLike = async (e: React.MouseEvent<HTMLElement>) => {
     try {
       e.stopPropagation();
-      const userName = localStorage.getItem("userEmail") || "Invitado";
+      const userEmail = localStorage.getItem("userEmail") || "Invitado";
+      const userName = localStorage.getItem("userName") || "Invitado";
 
-      await api.toggleLike(MediaFileID, userName);
+      await api.toggleLike(MediaFileID, userEmail, userName);
       fetchLikes();
     } catch (error) {
       console.error("Error al dar like:", error);
@@ -72,9 +85,11 @@ const MediaCardContainer = ({
 
   const handleSendComment = async () => {
     const UserEmail = localStorage.getItem("userEmail") || "Invitado";
+    const userName = localStorage.getItem("userName") || "Invitado";
     await api.createMediaFileComment({
       MediaFileID,
       UserEmail,
+      UserName: userName,
       CommentText: value,
     });
     setValue("");
@@ -119,13 +134,24 @@ const MediaCardContainer = ({
               className={isOwnComment ? styles.isOwnComment : styles.icon}
             />
             <p className={styles.userName}>
-              {isOwnComment ? "Yo" : comment.UserEmail}:
+              {isOwnComment ? "Yo" : comment.UserName}:
             </p>
           </div>
           <p>{comment.CommentText}</p>
         </div>
       );
     });
+  };
+
+  const renderLikes = (styles: any) => {
+    return likes.map((like: any) => (
+      <div key={like.ID} className={styles.likePreview}>
+        <div className={styles.userNameLikeContainer}>
+          <User size={18} strokeWidth={1.8} className={styles.icon} />
+          <p className={styles.userName}>{like.UserName}</p>
+        </div>
+      </div>
+    ));
   };
 
   useEffect(() => {
@@ -176,7 +202,12 @@ const MediaCardContainer = ({
     renderComments,
     comments,
     commentsRef,
-    isLastCommentOwn
+    isLastCommentOwn,
+    viewLikes,
+    handleShowLikes,
+    renderLikes,
+    handleClose,
+    likes,
   };
 
   return (
