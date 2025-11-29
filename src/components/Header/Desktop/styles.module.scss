@@ -8,14 +8,20 @@
 
   .containerLeft {
     display: flex;
+    justify-content: center;
+    align-items: center;
     gap: 1rem;
+
+    .pupaIcon {
+      width: 2rem;
+    }
 
     h2 {
       font-size: 1.25rem;
       font-weight: 700;
       line-height: 1.25;
       letter-spacing: -0.015em;
-      color: $TEXT_BTN;
+      color: $TEXT_SECONDARY;
     }
   }
 
@@ -25,7 +31,7 @@
     gap: 1rem;
 
     p {
-      color: $TEXT_GOLD;
+      color: $TEXT_SECONDARY;
       font-size: 0.875rem;
       font-weight: 500;
       line-height: 1.5;

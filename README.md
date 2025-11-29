@@ -71,3 +71,5 @@ export default defineConfig([
   },
 ])
 ```
+
+comando para correr tunel cloudflared tunnel run pupaeventos

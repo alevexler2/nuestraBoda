@@ -15,9 +15,9 @@ export default defineConfig(({ mode }) => {
           secure: false,
         },
       },
-      // 👇 Agregá esta línea con tu host de Cloudflare
+   
       allowedHosts: [
-        'neil-battery-cute-friend.trycloudflare.com',
+        'pupaeventos.com',
       ],
     },
   }

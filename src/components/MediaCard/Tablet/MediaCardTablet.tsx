@@ -94,13 +94,16 @@ const MediaCardTablet = ({
         <div className={`${styles.likesCount}`} onClick={handleShowLikes}>
           {likesCount > 0 ? (
             <span>
-              {likesCount === 1
-                ? `${likes[0]?.UserName || "Alguien"} dio "me gusta"`
-                : `${likes[0]?.UserName || "Alguien"} y ${
-                    likesCount - 1
-                  } persona${
-                    likesCount - 1 > 1 ? "s" : ""
-                  } más dieron "me gusta"`}
+              {!viewComments &&
+                !viewLikes &&
+                (likesCount === 1
+                  ? `${likes[0]?.UserName || "Alguien"} dio "me gusta"`
+                  : `${
+                      (likes[0]?.UserName || "Alguien").split(" ")[0] ||
+                      "Alguien"
+                    } y ${likesCount - 1} persona${
+                      likesCount - 1 > 1 ? "s" : ""
+                    } más dieron "me gusta"`)}
             </span>
           ) : (
             <span>¡Sé el primero en dar "me gusta"! 😄</span>
@@ -159,7 +162,6 @@ const MediaCardTablet = ({
             </div>
           </>
         )}
-
       </div>
       <CustomModalContainer
         isOpen={showAlertModal}

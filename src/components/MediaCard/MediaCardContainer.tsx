@@ -3,7 +3,6 @@ import useBreakpoints from "../../hooks/useBreakpoints";
 import type { MediaCardInterfaceContainer } from "../../interface/MediaCardInterfaceContainer";
 import MediaCardDesktop from "./Desktop/MediaCardDesktop";
 import MediaCardMobile from "./Mobile/MediaCardMobile";
-import MediaCardTablet from "./Tablet/MediaCardTablet";
 import { useEffect, useRef, useState, type MouseEvent } from "react";
 import { User } from "lucide-react";
 
@@ -15,7 +14,7 @@ const MediaCardContainer = ({
   setRefreshFlag,
   MediaFileID,
 }: MediaCardInterfaceContainer) => {
-  const { isMdDown, isLgDown } = useBreakpoints();
+  const { isMdDown } = useBreakpoints();
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [likes, setLikes] = useState<any[]>([]);
@@ -43,16 +42,16 @@ const MediaCardContainer = ({
     setViewComments(!viewComments);
     setViewLikes(false);
   };
-  
+
   const handleShowLikes = () => {
     setViewLikes(!viewLikes);
     setViewComments(false);
   };
-  
+
   const handleClose = () => {
     setViewLikes(false);
     setViewComments(false);
-  }
+  };
 
   const handleDelete = async () => {
     if (!imageUrl) return;
@@ -85,7 +84,10 @@ const MediaCardContainer = ({
 
   const handleSendComment = async () => {
     const UserEmail = localStorage.getItem("userEmail") || "Invitado";
-    const userName = localStorage.getItem("userName") || "Invitado";
+    const userName =
+      localStorage.getItem("userName") ||
+      localStorage.getItem("userEmail") ||
+      "Invitado";
     await api.createMediaFileComment({
       MediaFileID,
       UserEmail,
@@ -137,7 +139,7 @@ const MediaCardContainer = ({
               {isOwnComment ? "Yo" : comment.UserName}:
             </p>
           </div>
-          <p>{comment.CommentText}</p>
+          <p className={styles.commentText}>{comment.CommentText}</p>
         </div>
       );
     });
@@ -214,8 +216,6 @@ const MediaCardContainer = ({
     <>
       {isMdDown ? (
         <MediaCardMobile {...commonProps} />
-      ) : isLgDown ? (
-        <MediaCardTablet {...commonProps} />
       ) : (
         <MediaCardDesktop {...commonProps} />
       )}

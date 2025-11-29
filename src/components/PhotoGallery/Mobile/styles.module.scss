@@ -4,8 +4,13 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  background-color: $BACKGROUND_DARK;
 
-  .bannner { 
+  height: 100vh; 
+  overflow-y: auto; 
+  position: relative;
+
+  .bannner {
     padding: 0 3%;
     display: flex;
     flex-direction: column;
@@ -17,7 +22,7 @@
     font-weight: 900;
     line-height: 1.25;
     letter-spacing: -0.033em;
-    color: $TEXT_BTN
+    color: $TEXT_BTN;
   }
 
   p {
@@ -29,10 +34,11 @@
 }
 
 .cardsContainer {
-  display: flex; 
+  display: flex;
   justify-content: space-evenly;
   flex-wrap: wrap;
-  padding-bottom: 10vh; 
+  padding-bottom: 10vh;
+  margin-bottom: 6vh;
 }
 
 .modalContainer {
@@ -175,11 +181,11 @@
 .footer {
   background-color: $BACKGROUND_DARK;
   position: fixed;
-  bottom: 0;          
-  left: 0;         
-  width: 100vw;       
-  height: 8vh;     
-  display: flex;    
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  height: 8vh;
+  display: flex;
   align-items: center;
   justify-content: center;
 }

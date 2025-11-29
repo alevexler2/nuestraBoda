@@ -21,12 +21,34 @@ class ApiService {
     return ApiService.instance;
   }
 
-  public async getImages(eventId: string) {
+  public async getImages(
+    eventId: string,
+    page: number = 1,
+    limit: number = 10
+  ) {
     try {
       const response = await this.axiosInstance.get(
-        `api/media-file/event/${eventId}`
+        `api/media-file/event/${eventId}`,
+        {
+          params: { page, limit },
+        }
       );
-      return response.data;
+
+      const transformedData = {
+        ...response.data,
+        data: response.data.data.map((media: any) => {
+          if (media.data) {
+            return {
+              ...media,
+              imageUrl: media.data,
+            };
+          }
+
+          return media;
+        }),
+      };
+
+      return transformedData;
     } catch (error) {
       console.error("Error fetching images:", error);
       throw error;
@@ -71,7 +93,7 @@ class ApiService {
         },
         onUploadProgress: (evt) => {
           if (onProgress && evt.total && evt.total > 0) {
-            const percent = Math.round((evt.loaded * 100) / evt.total );
+            const percent = Math.round((evt.loaded * 100) / evt.total);
             onProgress(percent);
           }
         },
@@ -96,7 +118,11 @@ class ApiService {
     }
   }
 
-  public async toggleLike(mediaFileID: string, UserEmail: string, UserName: string) {
+  public async toggleLike(
+    mediaFileID: string,
+    UserEmail: string,
+    UserName: string
+  ) {
     try {
       const response = await this.axiosInstance.post("api/media-file-like", {
         MediaFileID: mediaFileID,

@@ -5,12 +5,12 @@ import { api } from "../../api/apiService";
 import type { CloudinaryFile } from "../../interface/PhotoGalleryInterface";
 import MediaCardContainer from "../MediaCard/MediaCardContainer";
 import { Oval } from "react-loader-spinner";
-import colors from "../../assets/_themes-vars.module.scss";
 import styles from "./Desktop/styles.module.scss";
 import { MEDIA_TYPE_ID } from "../../common/constants";
 import type { PhotoGalleryContainerInterface } from "../../interface/PhotoFalleryContainerInterface";
 import useBreakpoints from "../../hooks/useBreakpoints";
 import PhotoGalerryMobile from "./Mobile/PhotoGalerryMobile";
+import type { PaginationMeta } from "../../interface/PaginationMeta.interface";
 
 const PhotoGalleryContainer = ({
   setAccessGranted,
@@ -21,12 +21,18 @@ const PhotoGalleryContainer = ({
     {}
   );
   const [files, setFiles] = useState<CloudinaryFile[]>([]);
+  const [page, setPage] = useState(1);
+  const [meta, setMeta] = useState<PaginationMeta | null>(null);
   const [refreshFlag, setRefreshFlag] = useState(false);
   const activeCardRef = useRef<HTMLDivElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const { isMdDown } = useBreakpoints();
   const savedName = localStorage.getItem("userEmail") || "sin-nombre";
-  const name = localStorage.getItem("userName") || "sin-nombre";
+  const name =
+    localStorage.getItem("userName") ||
+    localStorage.getItem("userEmail") ||
+    "sin-nombre";
 
   const openGallery = () => {
     fileInputRef.current?.click();
@@ -91,22 +97,44 @@ const PhotoGalleryContainer = ({
     }
   };
 
-  useEffect(() => {
-    const fetchImages = async () => {
-      try {
-        setIsLoading(true);
-        setRefreshFlag(false);
-        const data = await api.getImages(event.ID);
-        setFiles(data);
-      } catch (err) {
-        console.error("Error fetching images:", err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const loadMore = () => {
+    if (meta?.hasNextPage) {
+      setPage((prev) => prev + 1);
+    }
+  };
 
-    if (event.ID) fetchImages();
+  const fetchImages = async () => {
+    try {
+      setIsLoading(true);
+      setRefreshFlag(false);
+      const data = await api.getImages(event.ID, page, 10);
+
+      if (page === 1) {
+        setFiles(data.data);
+      } else {
+        setFiles((prev) => [...prev, ...data.data]);
+      }
+      setMeta(data.meta);
+    } catch (err) {
+      console.error("Error fetching images:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (event.ID) {
+      setPage(1);
+      setFiles([]);
+      fetchImages();
+    }
   }, [refreshFlag, event]);
+
+  useEffect(() => {
+    if (page > 1) {
+      fetchImages();
+    }
+  }, [page]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -122,9 +150,49 @@ const PhotoGalleryContainer = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  useEffect(() => {
+    const el = scrollContainerRef.current;
+
+    if (!el) return;
+
+    const handleScroll = () => {
+      if (!meta?.hasNextPage || isLoading) return;
+
+      const scrollTop = el.scrollTop;
+      const scrollHeight = el.scrollHeight;
+      const clientHeight = el.clientHeight;
+
+      const percentage = (scrollTop + clientHeight) / scrollHeight;
+
+      if (percentage >= 0.8) {
+        loadMore();
+      }
+    };
+
+    el.addEventListener("scroll", handleScroll);
+    return () => el.removeEventListener("scroll", handleScroll);
+  }, [meta, isLoading]);
+
+  const renderPagination = () => {
+    if (!meta?.hasNextPage) return null;
+
+    return (
+      <div className={styles.paginationContainer}>
+        <button
+          className={styles.loadMoreBtn}
+          disabled={isLoading}
+          onClick={() => setPage((prev) => prev + 1)}
+        >
+          Ver más
+        </button>
+      </div>
+    );
+  };
+
   const renderMediaCards = () => {
     const uploading = Object.keys(uploadProgress).length > 0;
 
+    
     if (uploading) {
       const values = Object.values(uploadProgress);
       const avg =
@@ -144,43 +212,57 @@ const PhotoGalleryContainer = ({
       );
     }
 
-    if (isLoading) {
+    const cards = files.map((file) => (
+      <MediaCardContainer
+        key={file.ID}
+        subtitle={`Subido por ${file.UploadedByName}`}
+        imageUrl={file.imageUrl}
+        mediaType={file.MediaTypeID}
+        owner={
+          file.UploadedBy === savedName ||
+          savedName === event.OwnerEmail1 ||
+          savedName === event.OwnerEmail2
+        }
+        setRefreshFlag={setRefreshFlag}
+        MediaFileID={file.ID}
+      />
+    ));
+
+    // Si no hay imágenes y no estamos cargando
+    if (!files || (files.length === 0 && !isLoading)) {
       return (
-        <div className={styles.loaderContainer}>
-          <Oval
-            height={60}
-            width={60}
-            color={colors.backgroundBtn}
-            strokeWidth={4}
-            strokeWidthSecondary={4}
-            visible={true}
-            ariaLabel="loading"
-          />
+        <div className={styles.noImagesContainer}>
+          <p className={styles.noImgMsge}>
+            Todavía no hay imágenes. ¡Sé el primero en subir algo!
+          </p>
         </div>
       );
     }
 
-    return files.map((file) => {
-      return (
-        <MediaCardContainer
-          key={file.ID}
-          subtitle={`Subido por ${file.UploadedByName}`}
-          imageUrl={`${import.meta.env.VITE_API_URL}${file.URL}`}
-          mediaType={file.MediaTypeID}
-          owner={
-            file.UploadedBy === savedName ||
-            savedName === event.OwnerEmail1 ||
-            savedName === event.OwnerEmail2
-          }
-          setRefreshFlag={setRefreshFlag}
-          MediaFileID={file.ID}
-        />
-      );
-    });
+    return (
+      <>
+        {cards}
+
+        {isLoading && (
+          <div className={styles.loaderContainer}>
+            <Oval
+              height={32}
+              width={32}
+              strokeWidth={4}
+              strokeWidthSecondary={4}
+              visible={true}
+              ariaLabel="loading"
+            />
+          </div>
+        )}
+      </>
+    );
   };
 
+  const uploading = Object.keys(uploadProgress).length > 0;
+
   return (
-    <Container>
+    <Container event={event}>
       {isMdDown ? (
         <PhotoGalerryMobile
           handleFileChange={handleFileChange}
@@ -189,6 +271,8 @@ const PhotoGalleryContainer = ({
           openGallery={openGallery}
           fileInputRef={fileInputRef}
           event={event}
+          scrollContainerRef={scrollContainerRef}
+          isUploading={uploading}
         />
       ) : (
         <PhotoGalerryDesktop
@@ -198,6 +282,9 @@ const PhotoGalleryContainer = ({
           openGallery={openGallery}
           fileInputRef={fileInputRef}
           event={event}
+          scrollContainerRef={scrollContainerRef}
+          renderPagination={renderPagination}
+          isUploading={uploading}
         />
       )}
     </Container>

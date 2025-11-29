@@ -5,11 +5,11 @@ import AvatarContainer from "../../Avatar/AvatarContainer";
 import { LogOut } from "lucide-react";
 import type { HeaderInterface } from "../../../interface/HeaderInterface";
 
-const HeadersMobile = ({ logout, event }: HeaderInterface) => {
+const HeadersMobile = ({ logout, event, showIcon }: HeaderInterface) => {
   return (
     <div className={styles.container}>
       <div className={styles.containerLeft}>
-        <Heart fill={colors.error} strokeWidth={0} size={24} />
+        {showIcon && <Heart fill={colors.error} strokeWidth={0} size={24} />}
         <div>
           <h2>{event.EventName}</h2>
           <p>{event.Subtitle}</p>

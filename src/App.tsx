@@ -9,12 +9,19 @@ function App() {
   const [event, setEvent] = useState<EventInterface>({
     ID: "",
     EventName: "",
+    title: "",
     Subtitle: "",
     EventDate: new Date().toISOString(),
     OwnerEmail1: "",
     OwnerEmail2: "",
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
+    Theme: {
+      background: "#121212",
+      backgroundSecondary: "#282828",
+      font: "#FFFFFF",
+      fontSecondary: "#BBBBBB",
+    },
   });
   const [loadingEventData, setLoadingEventData] = useState(true);
 
@@ -37,6 +44,7 @@ function App() {
         .finally(() => setLoadingEventData(false));
     }
   }, []);
+
 
   return (
     <>

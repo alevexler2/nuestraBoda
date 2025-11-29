@@ -11,17 +11,19 @@ const PhotoGalerryMobile = ({
   openGallery,
   fileInputRef,
   event,
+  scrollContainerRef,
+  isUploading
 }: PhotoGalleryInterface) => {
+
   return (
-    <div className={styles.container}>
+    <div 
+      className={styles.container} 
+      ref={scrollContainerRef}
+    >
       <HeaderContainer setAccessGranted={setAccessGranted} event={event} />
       <div className={styles.bannner}>
         <DividerContainer />
-        <h2>¡Bienvenidos a nuestro álbum de boda!</h2>
-        <p>
-          Gracias por acompañarnos en este día tan especial.¡Subí tus fotos y
-          videos para compartir tus momentos con nosotros!
-        </p>
+        <h2>{event.title}</h2>
         <DividerContainer />
       </div>
       <input
@@ -34,7 +36,7 @@ const PhotoGalerryMobile = ({
         />
       <div className={styles.cardsContainer}>{renderMediaCards()}</div>
       <div className={styles.footer}>
-        <AddBtnContainer onClick={openGallery}/>
+        <AddBtnContainer onClick={!isUploading && openGallery}/>
       </div>
     </div>
   );

@@ -1,20 +1,40 @@
 @use "../../../assets/themes-vars.module" as *;
 
+.scrollWrapper {
+  height: 100vh;
+}
+
+.scrollWrapper::-webkit-scrollbar {
+  width: 12px;
+}
+
+.scrollWrapper::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  margin-left: 15px;
+}
+
+.scrollWrapper::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 10px;
+}
+
 .container {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  background-color: $BACKGROUND_LIGHT;
+  height: auto;
+  padding: 0 5%;
 
-  .bannner { 
-    padding: 0 3%;
-  }
+  position: relative;
 
+  
   h2 {
     font-size: 2.25rem;
     font-weight: 900;
     line-height: 1.25;
     letter-spacing: -0.033em;
-    color: $TEXT_BTN;
+    color: $TEXT_SECONDARY_DARK;
   }
 
   p {
@@ -26,10 +46,12 @@
 }
 
 .cardsContainer {
-  display: flex; 
-  justify-content: space-evenly;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   flex-wrap: wrap;
-  gap: 2rem;
+  gap: 1rem;
+  margin-bottom: 4rem;
 }
 
 .modalContainer {
@@ -161,6 +183,13 @@
   }
 }
 
+.noImagesContainer {
+  padding: 2rem;
+  .noImgMsge {
+    color: var(--font);
+  }
+}
+
 .loaderContainer {
   display: flex;
   align-items: center;
@@ -187,7 +216,26 @@
 
 .progressBarFill {
   height: 100%;
-  background: #ffb86a;
+  background: #afaeae;
   width: 0%;
   transition: width 0.25s ease;
+}
+
+.paginationContainer {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0;
+}
+
+.loadMoreBtn {
+  padding: 0.75rem 2rem;
+  background: $GREEN;
+  border: 1px solid white;
+  border-radius: 8px;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  &:hover {
+    background: $GREEN_HOVER;
+  }
 }

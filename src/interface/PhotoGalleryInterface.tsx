@@ -12,14 +12,18 @@ export interface CloudinaryFile {
   ownerEmail: string;
   MediaTypeID?: number;
   MediaFileID: string;
-  data: Base64URLString
+  data: Base64URLString;
+  imageUrl: string;
 }
 
 export interface PhotoGalleryInterface {
   handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   renderMediaCards: () => JSX.Element | JSX.Element[];
+  renderPagination?: () => JSX.Element | null;
   setAccessGranted: (value: boolean) => void;
   openGallery: () => void;
   fileInputRef: RefObject<HTMLInputElement | null>;
   event: EventInterface;
+  scrollContainerRef: RefObject<HTMLDivElement | null>;
+  isUploading: boolean;
 }

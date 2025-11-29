@@ -6,9 +6,11 @@
   padding: 0 3%;
   justify-content: space-between;
   align-items: center;
+  background-color: $BACKGROUND_DARK;
 
   .containerLeft {
     display: flex;
+    margin-top: 1rem;
     gap: 1rem;
 
     div {

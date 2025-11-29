@@ -1,9 +1,13 @@
 @use "../assets/themes-vars.module" as *;
 
-$font-display: 'Manrope', sans-serif;
+$font-display: "Manrope", sans-serif;
 
 body {
-  background-color: $BACKGROUND_DARK;
+  background-color: $BACKGROUND_LIGHT;
+
+  @media (max-width: 768px) {
+    background-color: $BACKGROUND_DARK;
+  }
 }
 
 * {

@@ -34,6 +34,7 @@ const MediaCardMobile = ({
   handleClose,
   likes,
 }: MediaCardInterface) => {
+  console.log(mediaType === 2 && imageUrl);
   return (
     <div ref={cardRef} className={styles.container}>
       <div className={styles.mediaWrapper}>
@@ -45,7 +46,14 @@ const MediaCardMobile = ({
         )}
 
         {mediaType === 2 && (
-          <video className={styles.media} src={imageUrl} controls />
+          <video
+            className={styles.media}
+            src={imageUrl}
+            controls
+            preload="metadata"
+          >
+            Tu navegador no soporta el tag de video.
+          </video>
         )}
 
         {owner && (
@@ -94,11 +102,16 @@ const MediaCardMobile = ({
         <div className={`${styles.likesCount}`} onClick={handleShowLikes}>
           {likesCount > 0 ? (
             <span>
-              {likesCount === 1
-                ? `${likes[0]?.UserName || "Alguien"} dio "me gusta"`
-                : `${likes[0]?.UserName || "Alguien"} y ${
-                    likesCount - 1
-                  } persona${likesCount - 1 > 1 ? "s" : ""} más dieron "me gusta"`}
+              {!viewComments &&
+                !viewLikes &&
+                (likesCount === 1
+                  ? `${likes[0]?.UserName || "Alguien"} dio "me gusta"`
+                  : `${
+                      (likes[0]?.UserName || "Alguien").split(" ")[0] ||
+                      "Alguien"
+                    } y ${likesCount - 1} persona${
+                      likesCount - 1 > 1 ? "s" : ""
+                    } más dieron "me gusta"`)}
             </span>
           ) : (
             <span>¡Sé el primero en dar "me gusta"! 😄</span>
@@ -106,12 +119,16 @@ const MediaCardMobile = ({
         </div>
 
         {viewLikes ? (
-          <div className={styles.commentsContainer}>
-            <div className={styles.commets}>{renderLikes(styles)}</div>
+          <div className={styles.contentContainer}>
+            <h4 className={styles.contentTitle}>Listado de "Me gusta"</h4>
+            <div className={styles.likes}>{renderLikes(styles)}</div>
           </div>
         ) : viewComments ? (
           <div className={styles.commentsContainer}>
-            <div className={styles.commets}>{renderComments(styles)}</div>
+            <div className={styles.contentContainer}>
+              <h4 className={styles.contentTitle}>Listado de comentarios</h4>
+              <div className={styles.commets}>{renderComments(styles)}</div>
+            </div>
 
             <CustomInputContainer
               placeholder="Ingresa un comentario"
@@ -146,7 +163,9 @@ const MediaCardMobile = ({
                   </p>
                 </div>
               )}
-              <p>{comments[comments.length - 1]?.CommentText}</p>
+              <p className={styles.comentPreview}>
+                {comments[comments.length - 1]?.CommentText}
+              </p>
             </div>
 
             <div
@@ -157,7 +176,6 @@ const MediaCardMobile = ({
             </div>
           </>
         )}
-
       </div>
       <CustomModalContainer
         isOpen={showAlertModal}

@@ -16,34 +16,37 @@ const PhotoGalerryDesktop = ({
   openGallery,
   fileInputRef,
   event,
+  scrollContainerRef,
+  renderPagination,
+  isUploading
 }: PhotoGalleryInterface) => {
+  console.log(renderPagination)
   return (
-    <div className={styles.container}>
-      <HeaderContainer setAccessGranted={setAccessGranted} event={event} />
-      <DividerContainer />
-      <div className={styles.bannner}>
-        <h2>¡Bienvenidos a nuestro álbum de boda!</h2>
-        <p>
-          Gracias por acompañarnos en este día tan especial.¡Subí tus fotos y
-          videos para compartir tus momentos con nosotros!
-        </p>
+    <div className={styles.scrollWrapper} ref={scrollContainerRef}>
+      <div className={styles.container} >
+        <HeaderContainer setAccessGranted={setAccessGranted} event={event} />
+        <DividerContainer />
+        <div className={styles.bannner}>
+          <h2>{event.title}</h2>
+        </div>
+        <DividerContainer />
+        <CustomBtnContainer
+          value="Subir"
+          icon={CameraIcon}
+          hasIcon={true}
+          onClick={!isUploading ? openGallery : () => {}}
+        />
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*,video/*"
+          multiple
+          onChange={handleFileChange}
+          style={{ display: "none" }}
+        />
+        <div className={styles.cardsContainer}>{renderMediaCards()}</div>
+        {renderPagination && renderPagination()}
       </div>
-      <DividerContainer />
-      <CustomBtnContainer
-        value="Subir"
-        icon={CameraIcon}
-        hasIcon={true}
-        onClick={openGallery}
-      />
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept="image/*,video/*"
-        multiple
-        onChange={handleFileChange}
-        style={{ display: "none" }}
-      />
-      <div className={styles.cardsContainer}>{renderMediaCards()}</div>
     </div>
   );
 };

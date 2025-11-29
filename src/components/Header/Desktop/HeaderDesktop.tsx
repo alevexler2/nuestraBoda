@@ -5,11 +5,11 @@ import AvatarContainer from "../../Avatar/AvatarContainer";
 import { LogOut } from "lucide-react";
 import type { HeaderInterface } from "../../../interface/HeaderInterface";
 
-const HeaderDesktop = ({ logout, event }: HeaderInterface) => {
+const HeaderDesktop = ({ logout, event, showIcon }: HeaderInterface) => {
   return (
     <div className={styles.container}>
       <div className={styles.containerLeft}>
-        <Heart fill={colors.error} strokeWidth={0} size={24} />
+        {showIcon && <Heart fill={colors.error} strokeWidth={0} size={24} />}
         <h2>{event.EventName}</h2>
       </div>
       <div className={styles.containerRight}>
@@ -17,7 +17,7 @@ const HeaderDesktop = ({ logout, event }: HeaderInterface) => {
         <AvatarContainer />
         <LogOut
           size={24}
-          color={colors.backgroundBtn}
+          color={colors.grey}
           style={{ cursor: "pointer", marginLeft: "10px" }}
           onClick={logout}
         />

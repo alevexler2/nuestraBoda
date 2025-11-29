@@ -4,17 +4,17 @@ import type { ContainerProps } from '../../interface/ContainerInterface';
 import useBreakpoints from '../../hooks/useBreakpoints';
 import MobileContainer from './Mobile/MobileContainer';
 
-const Container: React.FC<ContainerProps> = ({ children }) => {
+const Container: React.FC<ContainerProps> = ({ children, event  }) => {
   const { isMdDown } = useBreakpoints();
 
   return (
     <>
       {isMdDown ? (
-        <MobileContainer>
+        <MobileContainer event={event} >
           {children}
         </MobileContainer>
       ) : (
-        <DesktopContainer>
+        <DesktopContainer event={event}>
           {children}
         </DesktopContainer>
       )}

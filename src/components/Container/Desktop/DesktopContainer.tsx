@@ -1,13 +1,20 @@
-import React from 'react';
-import type { ContainerProps } from '../../../interface/ContainerInterface';
-import styles from './styles.module.scss';
+import React from "react";
+import type { ContainerProps } from "../../../interface/ContainerInterface";
+import styles from "./styles.module.scss";
 
-const DesktopContainer: React.FC<ContainerProps> = ({ children }) => {
+const DesktopContainer: React.FC<ContainerProps> = ({ children, event }) => {
   return (
-    <div className={styles.container}>
+    <div
+      className={styles.container}
+      style={
+        {
+          "--bg": event.Theme?.background,
+        } as React.CSSProperties
+      }
+    >
       {children}
     </div>
   );
-}
+};
 
 export default DesktopContainer;
