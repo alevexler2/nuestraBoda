@@ -7,17 +7,17 @@
   flex-direction: column;
   height: 90vh;
   gap: 1rem;
-  background-color: $BACKGROUND_LIGHT;
+  background-color: $BACKGROUND_DARK;
   .titleContainer {
     display: flex;
     align-items: center;
     gap: 1rem;
     h1 {
-      color: $TEXT_SECONDARY_DARK;
+      color: $TEXT_BTN;
     }
   }
   h4 {
-    color: $TEXT_SECONDARY;
+    color: $TEXT_BTN;
   }
 }
 

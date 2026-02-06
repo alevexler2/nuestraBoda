@@ -14,6 +14,7 @@ export interface CloudinaryFile {
   MediaFileID: string;
   data: Base64URLString;
   imageUrl: string;
+  streamUrl: string;
 }
 
 export interface PhotoGalleryInterface {

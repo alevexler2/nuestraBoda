@@ -17,7 +17,7 @@ const HeaderDesktop = ({ logout, event, showIcon }: HeaderInterface) => {
         <AvatarContainer />
         <LogOut
           size={24}
-          color={colors.grey}
+          color={colors.textLight}
           style={{ cursor: "pointer", marginLeft: "10px" }}
           onClick={logout}
         />

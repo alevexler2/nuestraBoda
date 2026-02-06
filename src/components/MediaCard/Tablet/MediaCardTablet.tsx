@@ -33,6 +33,7 @@ const MediaCardTablet = ({
   renderLikes,
   handleClose,
   likes,
+  streamUrl,
 }: MediaCardInterface) => {
   return (
     <div ref={cardRef} className={styles.container}>
@@ -45,7 +46,13 @@ const MediaCardTablet = ({
         )}
 
         {mediaType === 2 && (
-          <video className={styles.media} src={imageUrl} controls />
+          <video
+            className={styles.media}
+            src={streamUrl}
+            controls
+            preload="metadata"
+            playsInline
+          />
         )}
 
         {owner && (

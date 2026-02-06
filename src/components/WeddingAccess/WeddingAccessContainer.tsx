@@ -23,7 +23,6 @@ const WeddingAccessContainer = ({
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
       const providerEmail = user.providerData[0]?.email;
-      console.log("Usuario logueado:", user.displayName, user.email);
       setAccessGranted(true);
       localStorage.setItem("accessGranted", "true");
       localStorage.setItem("userName", user.displayName || "");

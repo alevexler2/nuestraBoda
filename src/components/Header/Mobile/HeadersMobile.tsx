@@ -19,7 +19,7 @@ const HeadersMobile = ({ logout, event, showIcon }: HeaderInterface) => {
         <AvatarContainer />
         <LogOut
           size={24}
-          color={colors.backgroundBtn}
+          color={colors.textLight}
           style={{ cursor: "pointer", marginLeft: "10px" }}
           onClick={logout}
         />

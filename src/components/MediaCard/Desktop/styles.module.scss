@@ -5,19 +5,20 @@
   flex-direction: row;
   width: 100%;
   height: 80vh;
-  border-radius: 1rem;
+  border-radius: 0.5rem;
   overflow: hidden;
-  background-color: black;
+  background-color: $BACKGROUND_BLACK;
   transition: transform 0.3s ease;
   position: relative;
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.45);
+  box-shadow:
+  0 10px 40px rgba(0, 0, 0, 0.8);
 }
 
 .mediaSection {
-  flex: 0 0 65%;
+  flex: 0 0 60%;
   display: flex;
   position: relative;
-  background-color: black;
+  background-color: $BACKGROUND_BLACK;
 }
 
 .mediaWrapper {
@@ -30,13 +31,12 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
-  background-color: black;
+  background-color: $BACKGROUND_BLACK;
 }
 
 .interactionSection {
-  flex: 0 0 35%;
-  background: $TEXT_PRIMARY;
-  color: $LIGHT_ORANGE;
+  flex: 0 0 40%;
+  background: $BACKGROUN_SECONDARY;
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -55,8 +55,8 @@
 }
 
 .uploaderInfo {
-  font-size: 0.9rem;
-  color: #f1f1f1;
+  font-size: 1rem;
+  color: $TEXT_SECONDARY;
   font-weight: 500;
 }
 
@@ -81,7 +81,7 @@
 .actions {
   display: flex;
   gap: 0.5rem;
-  color: $TEXT_BTN;
+  color: $TEXT_SECONDARY;
 
   svg {
     cursor: pointer;
@@ -95,9 +95,8 @@
 
 .likesCount {
   cursor: pointer;
-  color: $TEXT_BTN;
+  color: $TEXT_SECONDARY;
   font-size: 0.9rem;
-  // padding: 0.5rem 0;
 
   &:hover {
     opacity: 0.8;
@@ -115,7 +114,7 @@
 
 .contentTitle {
   margin: 0;
-  color: $TEXT_BTN;
+  color: $TEXT_SECONDARY;
   font-size: 1rem;
   font-weight: 600;
 }
@@ -180,10 +179,13 @@
     align-items: center;
     gap: 0.2rem;
     max-width: 10rem;
+    svg {
+      width: 2rem;
+    }
 
     .userName {
       font-weight: 700;
-      color: #ffb86a;
+      color: #D32F2F;
       width: auto;
       overflow: hidden;
       white-space: nowrap;
@@ -193,7 +195,7 @@
 
   p {
     width: 60%;
-    color: $TEXT_BTN;
+    color: $TEXT_SECONDARY;
   }
 }
 
@@ -221,7 +223,7 @@
 
   p {
     width: 100%;
-    color: $TEXT_BTN;
+    color: $TEXT_SECONDARY;
   }
 }
 
@@ -232,6 +234,9 @@
   gap: 1rem;
   padding: 2rem;
   text-align: center;
+  h3 {
+    color: $TEXT_BTN;
+  }
 }
 
 .modalButtons {
@@ -286,7 +291,7 @@
   top: -6px;
   right: -8px;
   background-color: $LIGHT_ORANGE;
-  color: $TEXT_BTN;
+  color: $TEXT_SECONDARY;
   font-size: 0.6rem;
   font-weight: 700;
   border-radius: 50%;
@@ -313,7 +318,7 @@
   top: -6px;
   right: -8px;
   background-color: $LIGHT_ORANGE;
-  color: $TEXT_BTN;
+  color: $TEXT_SECONDARY;
   font-size: 0.6rem;
   font-weight: 700;
   border-radius: 50%;
@@ -331,6 +336,9 @@
 
 .userNameLikeContainer {
   display: flex;
+  .userName {
+    color: $TEXT_SECONDARY;
+  }
 }
 
 .actionsContainer {

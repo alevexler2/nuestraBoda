@@ -2,7 +2,7 @@ import React from "react";
 import type { AvatarContainerProps } from "../../interface/AvatarContainerInterface";
 import AvatarDesktop from "./Desktop/AvatarDektop";
 import avatarImage from "../../assets/avatar.png";
-import diveriaImage from "../../assets/diveria.jpg";
+import diveriaImage from "../../assets/Union-2.svg";
 
 const AvatarContainer: React.FC<AvatarContainerProps> = ({
   name = "A & C",

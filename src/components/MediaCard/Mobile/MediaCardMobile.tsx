@@ -33,8 +33,9 @@ const MediaCardMobile = ({
   renderLikes,
   handleClose,
   likes,
+  streamUrl,
 }: MediaCardInterface) => {
-  console.log(mediaType === 2 && imageUrl);
+
   return (
     <div ref={cardRef} className={styles.container}>
       <div className={styles.mediaWrapper}>
@@ -48,9 +49,10 @@ const MediaCardMobile = ({
         {mediaType === 2 && (
           <video
             className={styles.media}
-            src={imageUrl}
+            src={streamUrl}
             controls
             preload="metadata"
+            playsInline
           >
             Tu navegador no soporta el tag de video.
           </video>

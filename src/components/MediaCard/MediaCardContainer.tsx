@@ -13,6 +13,7 @@ const MediaCardContainer = ({
   owner,
   setRefreshFlag,
   MediaFileID,
+  streamUrl,
 }: MediaCardInterfaceContainer) => {
   const { isMdDown } = useBreakpoints();
   const [showAlertModal, setShowAlertModal] = useState(false);
@@ -210,6 +211,7 @@ const MediaCardContainer = ({
     renderLikes,
     handleClose,
     likes,
+    streamUrl,
   };
 
   return (

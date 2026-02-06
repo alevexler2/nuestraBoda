@@ -212,11 +212,13 @@ const PhotoGalleryContainer = ({
       );
     }
 
-    const cards = files.map((file) => (
+    const cards = files.map((file) => {
+      return(
       <MediaCardContainer
         key={file.ID}
         subtitle={`Subido por ${file.UploadedByName}`}
         imageUrl={file.imageUrl}
+        streamUrl={file.streamUrl} 
         mediaType={file.MediaTypeID}
         owner={
           file.UploadedBy === savedName ||
@@ -226,7 +228,7 @@ const PhotoGalleryContainer = ({
         setRefreshFlag={setRefreshFlag}
         MediaFileID={file.ID}
       />
-    ));
+    )});
 
     // Si no hay imágenes y no estamos cargando
     if (!files || (files.length === 0 && !isLoading)) {

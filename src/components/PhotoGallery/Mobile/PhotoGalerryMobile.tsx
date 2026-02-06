@@ -37,6 +37,7 @@ const PhotoGalerryMobile = ({
       <div className={styles.cardsContainer}>{renderMediaCards()}</div>
       <div className={styles.footer}>
         <AddBtnContainer onClick={!isUploading && openGallery}/>
+        <span>Publicar</span>
       </div>
     </div>
   );

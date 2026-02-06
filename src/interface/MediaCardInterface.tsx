@@ -3,6 +3,7 @@ import type { JSX } from "react";
 export interface MediaCardInterface {
   subtitle: string;
   imageUrl: string;
+  streamUrl?: string;
   cardRef: React.RefObject<HTMLDivElement | null>;
   commentsRef: React.RefObject<HTMLDivElement | null>;
   mediaType?: number;

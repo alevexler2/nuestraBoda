@@ -11,6 +11,7 @@ const MediaCardDesktop = ({
   cardRef,
   mediaType,
   owner,
+  streamUrl,
   onDelete,
   showAlertModal,
   setShowAlertModal,
@@ -31,17 +32,24 @@ const MediaCardDesktop = ({
   renderLikes,
   likes,
 }: MediaCardInterface) => {
+
   return (
     <div ref={cardRef} className={styles.container}>
       {/* Sección izquierda - Media */}
       <div className={styles.mediaSection}>
         <div className={styles.mediaWrapper}>
           {mediaType === 1 && (
-            <img src={imageUrl} alt={subtitle} className={styles.media} />
+            <img src={imageUrl} alt={subtitle} className={styles.media} loading="lazy" />
           )}
 
           {mediaType === 2 && (
-            <video className={styles.media} src={imageUrl} controls />
+            <video
+              className={styles.media}
+              src={streamUrl}
+              controls
+              preload="metadata"
+              playsInline
+            />
           )}
         </div>
       </div>

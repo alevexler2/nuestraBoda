@@ -34,7 +34,7 @@
     font-weight: 900;
     line-height: 1.25;
     letter-spacing: -0.033em;
-    color: $TEXT_SECONDARY_DARK;
+    color: $TEXT_BTN;
   }
 
   p {
@@ -50,7 +50,7 @@
   flex-direction: column;
   align-items: center;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 2rem;
   margin-bottom: 4rem;
 }
 
@@ -186,7 +186,7 @@
 .noImagesContainer {
   padding: 2rem;
   .noImgMsge {
-    color: var(--font);
+    color: $TEXT_BTN;
   }
 }
 
@@ -229,13 +229,13 @@
 
 .loadMoreBtn {
   padding: 0.75rem 2rem;
-  background: $GREEN;
+  background: $BACKGROUN_SECONDARY;
   border: 1px solid white;
   border-radius: 8px;
-  color: white;
+  color: $TEXT_PRIMARY;
   font-size: 1rem;
   cursor: pointer;
   &:hover {
-    background: $GREEN_HOVER;
+    background: $BACKGROUN_SECONDARY_FOCUS;
   }
 }
