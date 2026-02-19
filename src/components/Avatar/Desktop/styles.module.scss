@@ -4,8 +4,8 @@
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  // border: 1px solid $TEXT_GREEN;
-  background-color: #2e5ca1;
+  // border: 1px solid $TEXT_BTN;
+  // background-color: #2e5ca1;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -20,7 +20,8 @@
 .image {
   width: 80%;
   height: 80%;
-  object-fit:fill
+  object-fit:cover;
+  border-radius: 50%;
 }
 
 .initials {
